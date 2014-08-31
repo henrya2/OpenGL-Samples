@@ -27,6 +27,8 @@
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 
+#include <PathUtil.h>
+
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -44,6 +46,8 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
 int main(void)
 {
     GLFWwindow* window;
+
+	printf("EXE path is: %s\n", PathUtil::getExcutablePath().c_str());
 
     glfwSetErrorCallback(error_callback);
 
