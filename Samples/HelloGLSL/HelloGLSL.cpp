@@ -30,7 +30,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "SamplesHelper.h"
+#include "framework.h"
 
 static void error_callback(int error, const char* description)
 {
