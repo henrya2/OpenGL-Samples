@@ -24,13 +24,10 @@
 //========================================================================
 //! [code]
 
-#include <GLFW/glfw3.h>
-#include <glm/glm.hpp>
+#include "framework.h"
 
 #include <stdlib.h>
 #include <stdio.h>
-
-#include "framework.h"
 
 static void error_callback(int error, const char* description)
 {

@@ -11,13 +11,11 @@ endif()
 # Add GLFW
 
 set(GLFW_DIRECTORY glfw-3.0.4)
-# include_directories(${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/${GLFW_DIRECTORY}/include)
 
 set(GLFW_INSTALL OFF CACHE STRING "" FORCE)
 set(GLFW_BUILD_EXAMPLES OFF CACHE STRING "" FORCE)
 set(GLFW_BUILD_TESTS OFF CACHE STRING "" FORCE)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/${GLFW_DIRECTORY})
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/${GLFW_DIRECTORY}/include)
 
 find_package(OpenGL REQUIRED)
 set(GL_APP_LIBS ${OPENGL_gl_LIBRARY})
@@ -28,20 +26,22 @@ set(GL_APP_DEPS glfw)
 
 set(GLEW_DIRECTORY glew-1.11.0)
 set(GLEW_LIB_NAME libglew_static)
-# include_directories(${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/${GLEW_DIRECTORY}/include)
 
 set(glew-cmake_BUILD_SHARED OFF CACHE STRING "" FORCE)
 set(GLEW_ONLY_LIBS OFF CACHE STRING "" FORCE)
 set(GLEW_INSTALL OFF CACHE STRING "" FORCE)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/${GLEW_DIRECTORY})
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/${GLEW_DIRECTORY}/include)
 
 list(APPEND GL_APP_DEPS ${GLEW_LIB_NAME})
 
 ##########################################
 # Add GLM
 set(GLM_DIRECTORY glm)
+
+# Add the include_directories last, to avoid the headers files to polutes other libraries
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/${GLM_DIRECTORY})
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/${GLFW_DIRECTORY}/include)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/${GLEW_DIRECTORY}/include)
 
 ##########################################
 # Add framework
