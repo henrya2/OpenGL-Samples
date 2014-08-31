@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 cmake_policy(VERSION 2.8)
 
+project(OpenGLSamples)
+
 if(MSVC)
 	set(BINARY_DIRECTORY build)
 endif()
@@ -60,5 +62,4 @@ function(createSample NAME)
 	add_dependencies(${SAMPLE_NAME} ${GL_APP_DEPS})
 endfunction(createSample)
 
-createSample(HelloGLFW)
 createSample(HelloGLSL)
