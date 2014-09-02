@@ -49,6 +49,8 @@ set(FRAMWORK_DIRECTORY framework)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/${FRAMWORK_DIRECTORY})
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/${FRAMWORK_DIRECTORY})
 
+set_property(TARGET framework PROPERTY COMPILE_DEFINITIONS GLEW_STATIC)
+
 list(APPEND GL_APP_DEPS framework)
 
 set(Sample_DIRECTORY Samples)
@@ -63,6 +65,8 @@ function(createSample NAME)
 	add_executable(${SAMPLE_NAME} ${SAMPLE_SOURCE} ${SAMPLE_INLINE} ${SAMPLE_HEADER})
 	target_link_libraries(${SAMPLE_NAME} ${GL_APP_LIBS} ${GL_APP_DEPS})
 	add_dependencies(${SAMPLE_NAME} ${GL_APP_DEPS})
+
+	set_property(TARGET ${SAMPLE_NAME} PROPERTY COMPILE_DEFINITIONS GLEW_STATIC)
 endfunction(createSample)
 
 include("SamplesLists.txt")
