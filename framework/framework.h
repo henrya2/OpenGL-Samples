@@ -5,7 +5,7 @@
 #include "SamplesHelper.h"
 #include "GLSLProgram.h"
 
-#include <glfw/glfw3.h>
+#include <SDL.h>
 #include <glm/glm.hpp>
 
 #endif

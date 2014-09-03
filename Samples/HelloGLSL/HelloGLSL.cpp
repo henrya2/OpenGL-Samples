@@ -1,162 +1,70 @@
-//========================================================================
-// Simple GLFW example
-// Copyright (c) Camilla Berglund <elmindreda@elmindreda.org>
-//
-// This software is provided 'as-is', without any express or implied
-// warranty. In no event will the authors be held liable for any damages
-// arising from the use of this software.
-//
-// Permission is granted to anyone to use this software for any purpose,
-// including commercial applications, and to alter it and redistribute it
-// freely, subject to the following restrictions:
-//
-// 1. The origin of this software must not be misrepresented; you must not
-//    claim that you wrote the original software. If you use this software
-//    in a product, an acknowledgment in the product documentation would
-//    be appreciated but is not required.
-//
-// 2. Altered source versions must be plainly marked as such, and must not
-//    be misrepresented as being the original software.
-//
-// 3. This notice may not be removed or altered from any source
-//    distribution.
-//
-//========================================================================
-//! [code]
-
-#include "framework.h"
-
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 #include <iostream>
 
-std::string sampleName = "HelloGLSL";
+#include "framework.h"
 
-GLSLProgram glslProgram;
+#define PROGRAM_NAME "Tutorial1"
 
-//vertex array and vertex buffer object IDs
-GLuint vaoID;
-GLuint vboVerticesID;
-GLuint vboIndicesID;
-
-struct Vertex
+/* A simple function that prints a message, the error code returned by SDL,
+* and quits the application */
+void sdldie(const char *msg)
 {
-	glm::vec3 position;
-	glm::vec3 color;
-};
-
-//triangle vertices and indices
-Vertex vertices[3];
-GLushort indices[3];
-
-//projection and modelview matrices
-glm::mat4 projectionMat = glm::mat4(1);
-glm::mat4 modelviewMat = glm::mat4(1);
-
-void init()
-{
-	glslProgram.loadShader(GLSLShaderType::VERTEX, sampleName + "/" + "HelloGLSL.vert");
-	glslProgram.loadShader(GLSLShaderType::FRAGMENT, sampleName + "/" + "HelloGLSL.frag");
-	glslProgram.link();
-
-	glslProgram.use();
-
-	//setup triangle geometry
-	//setup triangle vertices
-	vertices[0].color = glm::vec3(1, 0, 0);
-	vertices[1].color = glm::vec3(0, 1, 0);
-	vertices[2].color = glm::vec3(0, 0, 1);
-
-	vertices[0].position = glm::vec3(-1, -1, 0);
-	vertices[1].position = glm::vec3(0, 1, 0);
-	vertices[2].position = glm::vec3(1, -1, 0);
-
-	//setup triangle indices
-	indices[0] = 0;
-	indices[1] = 1;
-	indices[2] = 2;
-
-	glGenVertexArrays(1, &vaoID);
-	glGenBuffers(1, &vboVerticesID);
-	glGenBuffers(1, &vboIndicesID);
-	GLsizei stride = sizeof(Vertex);
-
-	glBindVertexArray(vaoID);
-
-	glBindBuffer(GL_ARRAY_BUFFER, vboVerticesID);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), &vertices[0], GL_STATIC_DRAW);
-	glEnableVertexAttribArray(glslProgram.getAttributeLocation("vVertex"));
-	glVertexAttribPointer(glslProgram.getAttributeLocation("vVertex"), 3, GL_FLOAT, GL_FALSE, stride, 0);
-
-	glEnableVertexAttribArray(glslProgram.getAttributeLocation("vColor"));
-	glVertexAttribPointer(glslProgram.getAttributeLocation("vColor"), 3, GL_FLOAT, GL_FALSE, stride, (void *)offsetof(Vertex, color));
-
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboIndicesID);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), &indices[0], GL_STATIC_DRAW);
+	printf("%s: %s\n", msg, SDL_GetError());
+	SDL_Quit();
+	exit(1);
 }
 
-void render()
+
+void checkSDLError(int line = -1)
 {
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-	glslProgram.use();
-
-	glslProgram.setUniform("MVP", projectionMat * modelviewMat);
-
-	glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_SHORT, 0);
+#ifndef NDEBUG
+	const char *error = SDL_GetError();
+	if (*error != '\0')
+	{
+		printf("SDL Error: %s\n", error);
+		if (line != -1)
+			printf(" + line: %i\n", line);
+		SDL_ClearError();
+	}
+#endif
 }
 
-void shutdown()
+
+/* Our program's entry point */
+int main(int argc, char *argv[])
 {
-	glslProgram.deleteProgram();
-
-	glDeleteBuffers(1, &vboVerticesID);
-	glDeleteBuffers(1, &vboIndicesID);
-	glDeleteBuffers(1, &vaoID);
-}
-
-static void error_callback(int error, const char* description)
-{
-    fputs(description, stderr);
-}
-
-static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
-{
-    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
-        glfwSetWindowShouldClose(window, GL_TRUE);
-}
-
-int main(void)
-{
-    GLFWwindow* window;
-
 	SamplesHelper::setupTheCurrentDirectoryToAssets();
 
-    glfwSetErrorCallback(error_callback);
+	SDL_Window *mainwindow; /* Our window handle */
+	SDL_GLContext maincontext; /* Our opengl context handle */
 
-    if (!glfwInit())
-        exit(EXIT_FAILURE);
+	if (SDL_Init(SDL_INIT_VIDEO) < 0) /* Initialize SDL's Video subsystem */
+		sdldie("Unable to initialize SDL"); /* Or die on error */
 
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
-#ifdef _DEBUG
-	glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
-#endif
+	/* Request opengl 3.2 context.
+	* SDL doesn't have the ability to choose which profile at this time of writing,
+	* but it should default to the core profile */
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
 
-    window = glfwCreateWindow(640, 480, "HelloGLFW", NULL, NULL);
-    if (!window)
-    {
-        glfwTerminate();
-        exit(EXIT_FAILURE);
-    }
+	/* Turn on double buffering with a 24bit Z buffer.
+	* You may need to change this to 16 or 32 for your system */
+	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 
-    glfwMakeContextCurrent(window);
+	/* Create our window centered at 512x512 resolution */
+	mainwindow = SDL_CreateWindow(PROGRAM_NAME, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
+		512, 512, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
+	if (!mainwindow) /* Die if creation failed */
+		sdldie("Unable to create window");
 
-    glfwSetKeyCallback(window, key_callback);
+	checkSDLError(__LINE__);
+
+	/* Create our opengl context and attach it to our window */
+	maincontext = SDL_GL_CreateContext(mainwindow);
+	checkSDLError(__LINE__);
 
 	// Load the OpenGL functions.
 	glewExperimental = true;
@@ -166,9 +74,8 @@ int main(void)
 	}
 	else if (GLEW_VERSION_3_3)
 	{
-			std::cout << "Driver supports OpenGL 3.3\nDetails:" << std::endl;
+		std::cout << "Driver supports OpenGL 3.3\nDetails:" << std::endl;
 	}
-
 	//print information on screen
 	std::cout << "\tUsing GLEW " << glewGetString(GLEW_VERSION) << std::endl;
 	std::cout << "\tVendor: " << glGetString(GL_VENDOR) << std::endl;
@@ -176,31 +83,34 @@ int main(void)
 	std::cout << "\tVersion: " << glGetString(GL_VERSION) << std::endl;
 	std::cout << "\tGLSL: " << glGetString(GL_SHADING_LANGUAGE_VERSION) << std::endl;
 
-	init();
 
-	float ratio;
-	int width, height;
+	/* This makes our buffer swap syncronized with the monitor's vertical refresh */
+	SDL_GL_SetSwapInterval(1);
 
-	glfwGetFramebufferSize(window, &width, &height);
-	ratio = width / (float)height;
+	/* Clear our buffer with a red background */
+	glClearColor(1.0, 0.0, 0.0, 1.0);
+	glClear(GL_COLOR_BUFFER_BIT);
+	/* Swap our back buffer to the front */
+	SDL_GL_SwapWindow(mainwindow);
+	/* Wait 2 seconds */
+	SDL_Delay(2000);
 
-	glViewport(0, 0, width, height);
+	/* Same as above, but green */
+	glClearColor(0.0, 1.0, 0.0, 1.0);
+	glClear(GL_COLOR_BUFFER_BIT);
+	SDL_GL_SwapWindow(mainwindow);
+	SDL_Delay(2000);
 
-    while (!glfwWindowShouldClose(window))
-    {
+	/* Same as above, but blue */
+	glClearColor(0.0, 0.0, 1.0, 1.0);
+	glClear(GL_COLOR_BUFFER_BIT);
+	SDL_GL_SwapWindow(mainwindow);
+	SDL_Delay(2000);
 
-		render();
+	/* Delete our opengl context, destroy our window, and shutdown SDL */
+	SDL_GL_DeleteContext(maincontext);
+	SDL_DestroyWindow(mainwindow);
+	SDL_Quit();
 
-        glfwSwapBuffers(window);
-        glfwPollEvents();
-    }
-
-	shutdown();
-
-    glfwDestroyWindow(window);
-
-    glfwTerminate();
-    exit(EXIT_SUCCESS);
+	return 0;
 }
-
-//! [code]
