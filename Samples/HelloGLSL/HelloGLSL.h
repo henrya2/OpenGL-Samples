@@ -9,6 +9,8 @@ public:
 	HelloGLSL();
 	~HelloGLSL();
 
+	virtual void init();
+
 	virtual void onRender();
 
 };

@@ -11,6 +11,13 @@ HelloGLSL::~HelloGLSL()
 
 }
 
+void HelloGLSL::init()
+{
+	Application::init();
+
+
+}
+
 void HelloGLSL::onRender()
 {
 

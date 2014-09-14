@@ -43,6 +43,39 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/${GLM_DIRECTORY})
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/${SDL2_DIRECTORY}/include)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/${GLEW_DIRECTORY}/include)
 
+################################
+# Add freeimage
+
+if(MSVC AND NOT CMAKE_CL_64)
+	set(FREEIMAGE_BINARY_DIRECTORY "win32")
+endif()
+if(MSVC AND CMAKE_CL_64)
+	set(FREEIMAGE_BINARY_DIRECTORY "win64")
+endif()
+if(APPLE)
+	set(FREEIMAGE_BINARY_DIRECTORY "macosx")
+endif()
+if(UNIX AND NOT APPLE AND CMAKE_CL_64)
+	set(FREEIMAGE_BINARY_DIRECTORY "linux64")
+endif()
+if(UNIX AND NOT APPLE AND NOT CMAKE_CL_64)
+	set(FREEIMAGE_BINARY_DIRECTORY "linux64")
+endif()
+
+set(FREEIMAGE_DIRECTORY FreeImage-3.15.4)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/${FREEIMAGE_DIRECTORY})
+
+if(MSVC)
+	set(FREEIMAGE_LIBRARY FreeImage.lib)
+	set(FREEIMAGE_BINARY_FILE FreeImage.dll)
+else()
+	add_definitions(-DFREEIMAGE_LIB)
+	set(FREEIMAGE_LIBRARY freeimage)
+	set(FREEIMAGE_BINARY_FILE freeimage)
+endif()
+list(APPEND GL_APP_LIBS ${FREEIMAGE_LIBRARY})
+set(FREEIMAGE_BIN_PATH ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/${FREEIMAGE_DIRECTORY}/${FREEIMAGE_BINARY_DIRECTORY}/${FREEIMAGE_BINARY_FILE})
+
 ##########################################
 # Add framework
 set(FRAMWORK_DIRECTORY framework)
@@ -61,6 +94,8 @@ function(createSample NAME)
 	file(GLOB SAMPLE_INLINE ${A_Sample_Path}/*.inl)
 	file(GLOB SAMPLE_HEADER ${A_Sample_Path}/*.h)
 	set(SAMPLE_NAME  ${NAME})
+
+	link_directories(${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/${FREEIMAGE_DIRECTORY}/${FREEIMAGE_BINARY_DIRECTORY})
 
 	add_executable(${SAMPLE_NAME} ${SAMPLE_SOURCE} ${SAMPLE_INLINE} ${SAMPLE_HEADER})
 	target_link_libraries(${SAMPLE_NAME} ${GL_APP_LIBS} ${GL_APP_DEPS})

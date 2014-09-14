@@ -11,7 +11,7 @@ public:
 
 	void setVerticalSync(bool sync);
 
-	void init();
+	virtual void init();
 
 	void setWindowTitle(const std::string& title);
 
