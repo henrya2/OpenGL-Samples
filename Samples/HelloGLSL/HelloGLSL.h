@@ -13,6 +13,12 @@ public:
 
 	virtual void onRender();
 
+	virtual void onPreRender();
+
+	virtual void onPostRender();
+
+	virtual void onBeforeRun();
+
 };
 
 #endif

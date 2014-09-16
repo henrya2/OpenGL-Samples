@@ -45,6 +45,7 @@ public:
 
 	void link();
 	void use();
+	void unUse();
 
 	void setUniform(const char* name, const glm::vec2& v);
 	void setUniform(const char* name, const glm::vec3& v);

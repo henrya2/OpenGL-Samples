@@ -27,6 +27,8 @@ public:
 	virtual void onRender();
 	virtual void onPostRender();
 
+	virtual void onBeforeRun() {};
+
 	void run();
 
 protected:

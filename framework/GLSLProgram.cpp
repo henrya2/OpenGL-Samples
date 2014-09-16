@@ -86,7 +86,13 @@ void GLSLProgram::link()
 
 void GLSLProgram::use()
 {
+	assert(mLinked);
 	glUseProgram(mProgramId);
+}
+
+void GLSLProgram::unUse()
+{
+	glUseProgram(0);
 }
 
 GLint GLSLProgram::getUniformLocation(const char* name)

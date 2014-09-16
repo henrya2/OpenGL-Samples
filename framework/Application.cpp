@@ -78,6 +78,11 @@ void Application::init()
 	{
 		sdldie("Unable to initialize SDL"); /* Or die on error */
 	}
+
+	/* Turn on double buffering with a 24bit Z buffer.
+	* You may need to change this to 16 or 32 for your system */
+	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 }
 
 void Application::createWindow(const std::string& title, int width, int height)
@@ -121,6 +126,11 @@ void Application::initGL()
 	std::cout << "\tRenderer: " << glGetString(GL_RENDERER) << std::endl;
 	std::cout << "\tVersion: " << glGetString(GL_VERSION) << std::endl;
 	std::cout << "\tGLSL: " << glGetString(GL_SHADING_LANGUAGE_VERSION) << std::endl;
+
+	int width, height;
+	SDL_GetWindowSize(mImpl->mWindow, &width, &height);
+
+	glViewport(0, 0, width, height);
 }
 
 void Application::destroy()
@@ -136,6 +146,7 @@ void Application::destroy()
 
 void Application::run()
 {
+	onBeforeRun();
 	while (1)
 	{
 		SDL_Event event;
