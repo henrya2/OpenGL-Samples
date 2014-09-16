@@ -19,7 +19,7 @@ public:
 
 	bool isWindowCreated() const;
 	void setGLVersion(int major, int minor);
-	void initGL();
+	bool initGL();
 
 	void destroy();
 

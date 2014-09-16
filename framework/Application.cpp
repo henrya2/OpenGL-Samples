@@ -3,6 +3,7 @@
 #include <gl\glew.h>
 
 #include <iostream>
+#include <stdio.h>
 #include "SamplesHelper.h"
 
 namespace
@@ -44,6 +45,9 @@ public:
 	SDL_GLContext mMainContext;
 
 	bool shouldClose;
+
+	int glMajorVersion;
+	int glMinorVersion;
 };
 
 Application::ApplicationImpl::ApplicationImpl()
@@ -100,6 +104,9 @@ void Application::setGLVersion(int major, int minor)
 {
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, major);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, minor);
+
+	mImpl->glMajorVersion = major;
+	mImpl->glMinorVersion = minor;
 }
 
 void Application::setWindowTitle(const std::string& title)
@@ -109,7 +116,11 @@ void Application::setWindowTitle(const std::string& title)
 	SDL_SetWindowTitle(mImpl->mWindow, title.c_str());
 }
 
-void Application::initGL()
+#ifdef WIN32
+#define snprintf _snprintf
+#endif
+
+bool Application::initGL()
 {
 	mImpl->mMainContext = SDL_GL_CreateContext(mImpl->mWindow);
 
@@ -118,6 +129,15 @@ void Application::initGL()
 	GLenum err = glewInit();
 	if (GLEW_OK != err)	{
 		std::cerr << "Error: " << glewGetErrorString(err) << std::endl;
+	}
+
+	char versionStr[128];
+	snprintf(versionStr, 127, "GL_VERSION_%d_%d", mImpl->glMajorVersion, mImpl->glMinorVersion);
+
+	if (!glewIsSupported(versionStr))
+	{
+		std::cerr << "Error: OpenGL version " << mImpl->glMajorVersion << "." << mImpl->glMinorVersion << " not supported" << std::endl;
+		return false;
 	}
 
 	//print information on screen
@@ -131,6 +151,8 @@ void Application::initGL()
 	SDL_GetWindowSize(mImpl->mWindow, &width, &height);
 
 	glViewport(0, 0, width, height);
+
+	return true;
 }
 
 void Application::destroy()

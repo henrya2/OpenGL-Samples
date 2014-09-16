@@ -91,11 +91,16 @@ void HelloGLSL::onBeforeRun()
 /* Our program's entry point */
 int main(int argc, char *argv[])
 {
+	bool result;
 	HelloGLSL app;
+
 	app.init();
 	app.createWindow("HelloGLSL", 640, 480);
 	app.setGLVersion(3, 3);
-	app.initGL();
+	result = app.initGL();
+
+	if (!result)
+		return -1;
 
 	app.run();
 
