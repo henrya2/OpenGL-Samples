@@ -31,12 +31,14 @@ void GLSLProgram::compileShader(GLSLShaderType type, const std::string& source)
 	// Check for errors
 	GLint status;
 	glGetShaderiv(shaderId, GL_COMPILE_STATUS, &status);
-	if (!status) {
+	if (!status)
+	{
 		// Compile failed, get log
 		int length = 0;
 		std::string logString;
 		glGetShaderiv(shaderId, GL_INFO_LOG_LENGTH, &length);
-		if (length > 0) {
+		if (length > 0) 
+		{
 			char * c_log = new char[length];
 			int written = 0;
 			glGetShaderInfoLog(shaderId, length, &written, c_log);
