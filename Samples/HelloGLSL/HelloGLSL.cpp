@@ -1,6 +1,8 @@
 #include "framework.h"
 #include "HelloGLSL.h"
 
+const std::string g_programName = "HelloGLSL";
+
 const std::string strVertexShader(
 	"#version 330\n"
 	"layout(location = 0) in vec4 position;\n"
@@ -52,15 +54,12 @@ void HelloGLSL::onRender()
 
 	glslProgram.use();
 
-	glBindBuffer(GL_ARRAY_BUFFER, positionBufferObject);
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, 0);
+	glBindVertexArray(vao);
 
 	glDrawArrays(GL_TRIANGLES, 0, 3);
 
-	glDisableVertexAttribArray(0);
-
 	glslProgram.unUse();
+	glBindVertexArray(0);
 }
 
 void HelloGLSL::onPreRender()
@@ -74,18 +73,34 @@ void HelloGLSL::onPostRender()
 
 void HelloGLSL::onBeforeRun()
 {
-	glslProgram.compileShader(GLSLShaderType::VERTEX, strVertexShader);
-	glslProgram.compileShader(GLSLShaderType::FRAGMENT, strFragmentShader);
+	try
+	{
+		glslProgram.loadShader(GLSLShaderType::VERTEX, g_programName + "/" + "HelloGLSL.vert");
+		glslProgram.loadShader(GLSLShaderType::FRAGMENT, g_programName + "/" + "HelloGLSL.frag");
+	}
+	catch (GLSLProgramException& e)
+	{
+		printf("%s\n", e.what());
+		system("pause");
+		exit(EXIT_FAILURE);
+	}
+
 	glslProgram.link();
 
 	glGenBuffers(1, &positionBufferObject);
 
 	glBindBuffer(GL_ARRAY_BUFFER, positionBufferObject);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertexPositions), vertexPositions, GL_STATIC_DRAW);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 	glGenVertexArrays(1, &vao);
 	glBindVertexArray(vao);
+
+	GLint positionLoc = glslProgram.getAttributeLocation("position");
+	glEnableVertexAttribArray(positionLoc);
+	glVertexAttribPointer(positionLoc, 4, GL_FLOAT, GL_FALSE, 0, 0);
+
+	glBindVertexArray(0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
 /* Our program's entry point */

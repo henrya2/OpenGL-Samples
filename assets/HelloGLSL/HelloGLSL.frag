@@ -1,12 +1,9 @@
 #version 330 core
 
-layout(location=0) out vec4 vFragColor;	//fragment shader output
-
-//input form the vertex shader
-smooth in vec4 vSmoothColor;		//interpolated colour to fragment shader
+layout(location=0) out vec4 outputColor;	//fragment shader output
 
 void main()
 {
 	//set the interpolated colour as the shader output
-	vFragColor = vSmoothColor;
+	outputColor = vec4(1.0f, 1.0f, 1.0f, 1.0f);
 }
