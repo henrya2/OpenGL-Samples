@@ -3,24 +3,6 @@
 
 const std::string g_programName = "HelloGLSL";
 
-const std::string strVertexShader(
-	"#version 330\n"
-	"layout(location = 0) in vec4 position;\n"
-	"void main()\n"
-	"{\n"
-	"   gl_Position = position;\n"
-	"}\n"
-	);
-
-const std::string strFragmentShader(
-	"#version 330\n"
-	"layout(location = 0) out vec4 outputColor;\n"
-	"void main()\n"
-	"{\n"
-	"   outputColor = vec4(1.0f, 1.0f, 1.0f, 1.0f);\n"
-	"}\n"
-	);
-
 GLSLProgram glslProgram;
 
 const float vertexPositions[] = {
