@@ -1,38 +1,12 @@
 #include "Application.h"
-#include <SDL.h>
 #include <gl\glew.h>
+#include <glfw/glfw3.h>
 
 #include <iostream>
 #include <stdio.h>
+#include <assert.h>
+
 #include "SamplesHelper.h"
-
-namespace
-{
-	/* A simple function that prints a message, the error code returned by SDL,
-	* and quits the application */
-	void sdldie(const char *msg)
-	{
-		printf("%s: %s\n", msg, SDL_GetError());
-		SDL_Quit();
-		exit(1);
-	}
-
-
-	void checkSDLError(int line = -1)
-	{
-#ifndef NDEBUG
-		const char *error = SDL_GetError();
-		if (*error != '\0')
-		{
-			printf("SDL Error: %s\n", error);
-			if (line != -1)
-				printf(" + line: %i\n", line);
-			SDL_ClearError();
-		}
-#endif
-	}
-
-}
 
 class Application::ApplicationImpl
 {
@@ -40,9 +14,7 @@ public:
 	ApplicationImpl();
 	~ApplicationImpl();
 
-	SDL_Window* mWindow;
-
-	SDL_GLContext mMainContext;
+	GLFWwindow* mWindow;
 
 	bool shouldClose;
 
@@ -52,7 +24,6 @@ public:
 
 Application::ApplicationImpl::ApplicationImpl()
 	: mWindow(nullptr)
-	, mMainContext(nullptr)
 	, shouldClose(false)
 {
 
@@ -78,21 +49,15 @@ void Application::init()
 {
 	SamplesHelper::setupTheCurrentDirectoryToAssets();
 
-	if (SDL_Init(SDL_INIT_VIDEO) < 0) /* Initialize SDL's Video subsystem */
+	if (!glfwInit()) 
 	{
-		sdldie("Unable to initialize SDL"); /* Or die on error */
+		exit(EXIT_FAILURE);
 	}
-
-	/* Turn on double buffering with a 24bit Z buffer.
-	* You may need to change this to 16 or 32 for your system */
-	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 }
 
 void Application::createWindow(const std::string& title, int width, int height)
 {
-	mImpl->mWindow = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-		width, height, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
+	mImpl->mWindow = glfwCreateWindow(width, height, title.c_str(), NULL, NULL);
 }
 
 bool Application::isWindowCreated() const
@@ -102,18 +67,19 @@ bool Application::isWindowCreated() const
 
 void Application::setGLVersion(int major, int minor)
 {
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, major);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, minor);
-
 	mImpl->glMajorVersion = major;
 	mImpl->glMinorVersion = minor;
+
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, major);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, minor);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 }
 
 void Application::setWindowTitle(const std::string& title)
 {
-	SDL_assert(mImpl);
-	SDL_assert(mImpl->mWindow);
-	SDL_SetWindowTitle(mImpl->mWindow, title.c_str());
+	assert(mImpl);
+	assert(mImpl->mWindow);
+	glfwSetWindowTitle(mImpl->mWindow, title.c_str());
 }
 
 #ifdef WIN32
@@ -122,7 +88,9 @@ void Application::setWindowTitle(const std::string& title)
 
 bool Application::initGL()
 {
-	mImpl->mMainContext = SDL_GL_CreateContext(mImpl->mWindow);
+	assert(mImpl);
+	assert(mImpl->mWindow);
+	glfwMakeContextCurrent(mImpl->mWindow);
 
 	// Load the OpenGL functions.
 	glewExperimental = true;
@@ -148,7 +116,7 @@ bool Application::initGL()
 	std::cout << "\tGLSL: " << glGetString(GL_SHADING_LANGUAGE_VERSION) << std::endl;
 
 	int width, height;
-	SDL_GetWindowSize(mImpl->mWindow, &width, &height);
+	glfwGetFramebufferSize(mImpl->mWindow, &width, &height);
 
 	glViewport(0, 0, width, height);
 
@@ -157,32 +125,22 @@ bool Application::initGL()
 
 void Application::destroy()
 {
-	SDL_assert(mImpl);
-	SDL_assert(mImpl->mWindow);
-	SDL_assert(mImpl->mMainContext);
+	assert(mImpl);
+	assert(mImpl->mWindow);
 
-	/* Delete our opengl context, destroy our window, and shutdown SDL */
-	SDL_GL_DeleteContext(mImpl->mMainContext);
-	SDL_DestroyWindow(mImpl->mWindow);
+	glfwDestroyWindow(mImpl->mWindow);
 }
 
 void Application::run()
 {
 	onBeforeRun();
-	while (1)
+	while (!glfwWindowShouldClose(mImpl->mWindow))
 	{
-		SDL_Event event;
-		while (SDL_PollEvent(&event))
-		{
-			if (event.type == SDL_QUIT)
-			{
-				goto shouldEnd;
-			}
-		}
-
 		onPreRender();
 		onRender();
 		onPostRender();
+
+		glfwPollEvents();
 	}
 
 shouldEnd:
@@ -202,11 +160,11 @@ void Application::onRender()
 
 void Application::onPostRender()
 {
-	SDL_GL_SwapWindow(mImpl->mWindow);
+	glfwSwapBuffers(mImpl->mWindow);
 }
 
 void Application::setVerticalSync(bool sync)
 {
 	/* This makes our buffer swap syncronized with the monitor's vertical refresh */
-	SDL_GL_SetSwapInterval(sync ? 1 : 0);
+	glfwSwapInterval(sync ? 1 : 0);
 }

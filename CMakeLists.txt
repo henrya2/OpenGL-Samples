@@ -7,18 +7,17 @@ if(MSVC)
 	set(BINARY_DIRECTORY build)
 endif()
 
-#########################################
-# Add SDL2
 
-set(SDL2_DIRECTORY SDL2-2.0.3)
-set(SDL_INSTALL OFF CACHE STRING "" FORCE)
-set(SDL_SHARED OFF CACHE STRING "" FORCE)
-set(DIRECTX OFF CACHE STRING "" FORCE)
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/${SDL2_DIRECTORY})
-
+################################
+# Add GLFW
+set(GLFW_DIRECTORY glfw-3.0.3)
+set(GLFW_INSTALL OFF CACHE STRING "" FORCE)
+set(GLFW_BUILD_EXAMPLES OFF CACHE STRING "" FORCE)
+set(GLFW_BUILD_TESTS OFF CACHE STRING "" FORCE)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/${GLFW_DIRECTORY})
+set(GL_APP_DEPS glfw ${GLFW_LIBRARIES})
 find_package(OpenGL REQUIRED)
 set(GL_APP_LIBS ${OPENGL_gl_LIBRARY})
-set(GL_APP_DEPS SDL2main SDL2-static)
 
 
 ##########################################
@@ -40,7 +39,7 @@ set(GLM_DIRECTORY glm)
 
 # Add the include_directories last, to avoid the headers files to polutes other libraries
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/${GLM_DIRECTORY})
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/${SDL2_DIRECTORY}/include)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/${GLFW_DIRECTORY}/include)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/${GLEW_DIRECTORY}/include)
 
 ################################

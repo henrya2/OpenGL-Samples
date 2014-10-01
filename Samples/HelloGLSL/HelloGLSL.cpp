@@ -92,8 +92,8 @@ int main(int argc, char *argv[])
 	HelloGLSL app;
 
 	app.init();
-	app.createWindow("HelloGLSL", 640, 480);
 	app.setGLVersion(3, 3);
+	app.createWindow("HelloGLSL", 640, 480);
 	result = app.initGL();
 
 	if (!result)
