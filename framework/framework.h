@@ -1,5 +1,4 @@
-#ifndef FRAMEWORK_H
-#define FRAMEWORK_H
+#pragma once
 
 #include "PathUtil.h"
 #include "SamplesHelper.h"
@@ -8,5 +7,6 @@
 #include <glm/glm.hpp>
 
 #include "Application.h"
-
-#endif
+#include "Director.h"
+#include "IWindow.h"
+#include "IInputManager.h"

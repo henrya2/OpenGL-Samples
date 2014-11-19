@@ -24,16 +24,8 @@ HelloGLSL::~HelloGLSL()
 
 }
 
-void HelloGLSL::init()
-{
-	Application::init();
-}
-
 void HelloGLSL::onRender()
 {
-	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
 	glslProgram.use();
 
 	glBindVertexArray(vao);
@@ -46,14 +38,37 @@ void HelloGLSL::onRender()
 
 void HelloGLSL::onPreRender()
 {
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 void HelloGLSL::onPostRender()
 {
-	Application::onPostRender();
+
 }
 
-void HelloGLSL::onBeforeRun()
+bool HelloGLSL::onBeforeRun()
+{
+	auto window = Director::getInstance()->getWindow();
+
+	if (!window)
+	{
+		window = Director::getInstance()->createDefaultWindow();
+		window->createWindow("Hello", 640, 480);
+		window->setGLVersion(3, 3);
+		bool result = window->initGL();
+		if (!result)
+			return false;
+
+		Director::getInstance()->setWindow(window);
+	}
+
+	customInit();
+
+	return true;
+}
+
+void HelloGLSL::customInit()
 {
 	try
 	{
@@ -88,16 +103,7 @@ void HelloGLSL::onBeforeRun()
 /* Our program's entry point */
 int main(int argc, char *argv[])
 {
-	bool result;
 	HelloGLSL app;
-
-	app.init();
-	app.setGLVersion(3, 3);
-	app.createWindow("HelloGLSL", 640, 480);
-	result = app.initGL();
-
-	if (!result)
-		return -1;
 
 	app.run();
 

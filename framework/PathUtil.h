@@ -1,5 +1,4 @@
-#ifndef PATH_UTIL_H
-#define PATH_UTIL_H
+#pragma once
 
 #include <string>
 
@@ -9,5 +8,3 @@ namespace PathUtil
 	std::string getCurrentDirectory();
 	std::string getExcutablePath();
 }
-
-#endif

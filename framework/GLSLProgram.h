@@ -1,5 +1,4 @@
-#ifndef GLSL_PROGRAM_H
-#define GLSL_PROGRAM_H
+#pragma once
 
 #include <string>
 #include <unordered_map>
@@ -64,5 +63,3 @@ private:
 	StringGLuintMap mUniformLocations;
 	StringGLuintMap mAttribLocations;
 };
-
-#endif

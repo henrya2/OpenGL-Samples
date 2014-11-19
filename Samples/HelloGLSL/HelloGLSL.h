@@ -9,15 +9,15 @@ public:
 	HelloGLSL();
 	~HelloGLSL();
 
-	virtual void init();
-
 	virtual void onRender();
 
 	virtual void onPreRender();
 
 	virtual void onPostRender();
 
-	virtual void onBeforeRun();
+	virtual bool onBeforeRun();
+
+	void customInit();
 
 };
 

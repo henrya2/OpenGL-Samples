@@ -1,9 +1,6 @@
-#ifndef SAMPLES_HELPER_H
-#define SAMPLES_HELPER_H
+#pragma once
 
 namespace SamplesHelper
 {
 	void setupTheCurrentDirectoryToAssets();
 }
-
-#endif
