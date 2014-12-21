@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <functional>
 #include <glm/glm.hpp>
 #include "IInputManager.h"
 
@@ -21,5 +22,9 @@ public:
 	virtual void setGLVersion(int major, int minor) = 0;
 	virtual bool initGL() = 0;
 	virtual void destroy() = 0;
-	virtual IInputManager* GetInputManager() = 0;
+	virtual IInputManager* getInputManager() = 0;
+
+	typedef std::function < void(const glm::ivec2& viewSize) > ViewSizeChangedCallback;
+	ViewSizeChangedCallback viewSizeChangedCallback;
+
 };

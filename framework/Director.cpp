@@ -1,4 +1,5 @@
 #include "Director.h"
+#include "Scene.h"
 #include "SamplesHelper.h"
 #include "GlfwOpenGLWindow.h"
 
@@ -16,7 +17,8 @@ Director* Director::getInstance()
 }
 
 Director::Director()
-	:mWindow(nullptr)
+	: mWindow(nullptr)
+	, mCurrentScene(nullptr)
 {
 
 }
@@ -38,10 +40,43 @@ IWindow* Director::createDefaultWindow()
 
 void Director::mainLoop()
 {
-
+	if (mCurrentScene)
+	{
+		mCurrentScene->internalUpdate();
+		mCurrentScene->internalLateUpdate();
+	}
 }
 
 IWindow* Director::getWindow()
 {
 	return mWindow;
+}
+
+IInputManager* Director::getInputManager()
+{
+	if (mWindow)
+	{
+		return mWindow->getInputManager();
+	}
+
+	return nullptr;
+}
+
+void Director::runWithScene(Scene* scene)
+{
+	if (scene == mCurrentScene)
+		return;
+
+	if (mCurrentScene)
+	{
+		mCurrentScene->onLeave();
+	}
+
+	scene->onEnter();
+	mCurrentScene = scene;
+}
+
+Scene* Director::getRunningScene()
+{
+	return mCurrentScene;
 }

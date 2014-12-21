@@ -26,12 +26,17 @@ void Application::run()
 
 	while (!window->windowShouldClose())
 	{
+		window->pollEvents();
+
+		onUpdate();
+
 		onPreRender();
 		onRender();
 		onPostRender();
 
+		director->mainLoop();
+
 		window->swapBuffers();
-		window->pollEvents();
 	}
 }
 
@@ -45,6 +50,11 @@ void Application::onRender()
 }
 
 void Application::onPostRender()
+{
+
+}
+
+void Application::onUpdate()
 {
 
 }

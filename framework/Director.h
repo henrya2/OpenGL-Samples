@@ -1,6 +1,8 @@
 #pragma once
 
 class IWindow;
+class Scene;
+class IInputManager;
 
 class Director
 {
@@ -9,15 +11,20 @@ public:
 	void init();
 
 	IWindow* getWindow();
+	IInputManager* getInputManager();
 	void setWindow(IWindow* window);
 
 	void mainLoop();
 
 	IWindow* createDefaultWindow();
 
-private:
-	Director();
+	void runWithScene(Scene* scene);
+	Scene* getRunningScene();
 
 private:
+	Director();
+private:
 	IWindow* mWindow;
+
+	Scene* mCurrentScene;
 };

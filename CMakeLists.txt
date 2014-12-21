@@ -81,7 +81,7 @@ set(FRAMWORK_DIRECTORY framework)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/${FRAMWORK_DIRECTORY})
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/${FRAMWORK_DIRECTORY})
 
-set_property(TARGET framework PROPERTY COMPILE_DEFINITIONS GLEW_STATIC)
+set_property(TARGET framework PROPERTY COMPILE_DEFINITIONS GLEW_STATIC GLM_SWIZZLE)
 
 list(APPEND GL_APP_DEPS framework)
 
@@ -100,7 +100,7 @@ function(createSample NAME)
 	target_link_libraries(${SAMPLE_NAME} ${GL_APP_LIBS} ${GL_APP_DEPS})
 	add_dependencies(${SAMPLE_NAME} ${GL_APP_DEPS})
 
-	set_property(TARGET ${SAMPLE_NAME} PROPERTY COMPILE_DEFINITIONS GLEW_STATIC)
+	set_property(TARGET ${SAMPLE_NAME} PROPERTY COMPILE_DEFINITIONS GLEW_STATIC GLM_SWIZZLE)
 endfunction(createSample)
 
 include("SamplesLists.txt")

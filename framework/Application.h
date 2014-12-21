@@ -15,4 +15,5 @@ public:
 	virtual bool onBeforeRun() { return true; };
 
 	void run();
+	virtual void onUpdate();
 };

@@ -4,11 +4,7 @@
 #include "IInputManager.h"
 
 struct GLFWwindow;
-
-class GlfwInputManager : public IInputManager
-{
-
-};
+class GlfwOpenGLInputManager;
 
 class GlfwOpenGLWindow : public IWindow
 {
@@ -35,11 +31,13 @@ public:
 
 	virtual void destroy();
 
-	virtual IInputManager* GetInputManager();
+	virtual IInputManager* getInputManager();
 
+	GLFWwindow* getInternalGlfwWindow() const { return mGlfwWindow;  }
+	void notifyViewSizeChanged(int width, int height);
 private:
 	GLFWwindow* mGlfwWindow;
-	GlfwInputManager* mInputManager;
+	GlfwOpenGLInputManager* mInputManager;
 
 	int glMajorVersion;
 	int glMinorVersion;
