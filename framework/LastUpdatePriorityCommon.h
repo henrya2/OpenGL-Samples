@@ -1,0 +1,3 @@
+#pragma once
+
+#define CAMERA_UPDATE_PRIORITY 0xFFFFFFF0

@@ -1,35 +1,35 @@
-#include "SceneNode.h"
+#include "NodeBase.h"
 #include "Scene.h"
 #include "IComponent.h"
 
-SceneNode* SceneNode::getParent()
+NodeBase* NodeBase::getParent()
 {
 	return mParent;
 }
 
-void SceneNode::setParent(SceneNode* parent)
+void NodeBase::setParent(NodeBase* parent)
 {
 	onParentChanged(parent);
 	mParent = parent;
 }
 
-SceneNode::SceneNode()
+NodeBase::NodeBase()
 {
 	mTransform = new Transform();
 }
 
-SceneNode::~SceneNode()
+NodeBase::~NodeBase()
 {
 	delete mTransform;
 }
 
-void SceneNode::addChild(SceneNode* node)
+void NodeBase::addChild(NodeBase* node)
 {
 	mChildren.push_back(node);
 	node->setParent(this);
 }
 
-void SceneNode::removeChild(SceneNode* node)
+void NodeBase::removeChild(NodeBase* node)
 {
 	auto iter = std::find(mChildren.begin(), mChildren.end(), node);
 	if (iter != mChildren.end())
@@ -38,7 +38,7 @@ void SceneNode::removeChild(SceneNode* node)
 	}
 }
 
-void SceneNode::internalUpdate()
+void NodeBase::internalUpdate()
 {
 	onUpdate();
 
@@ -53,7 +53,7 @@ void SceneNode::internalUpdate()
 	}
 }
 
-void SceneNode::internalLateUpdate()
+void NodeBase::internalLateUpdate()
 {
 	onLateUpdate();
 
@@ -66,9 +66,21 @@ void SceneNode::internalLateUpdate()
 	{
 		child->internalLateUpdate();
 	}
+
+	mTransform->clearDirty();
 }
 
-void SceneNode::render(const Camera& camera) const
+void NodeBase::cameraRender(const Camera& camera) const
+{
+	for (auto component : mComponents)
+	{
+		component->onRender(camera);
+	}
+
+	onRender(camera);
+}
+
+void NodeBase::onRender(const Camera& camera) const
 {
 
 }

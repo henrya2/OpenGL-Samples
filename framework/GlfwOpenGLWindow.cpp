@@ -278,7 +278,7 @@ IInputManager* GlfwOpenGLWindow::getInputManager()
 
 bool GlfwOpenGLWindow::windowShouldClose() const
 {
-	return glfwWindowShouldClose(mGlfwWindow);
+	return glfwWindowShouldClose(mGlfwWindow) != 0;
 }
 
 void GlfwOpenGLWindow::pollEvents()

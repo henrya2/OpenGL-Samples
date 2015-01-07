@@ -17,6 +17,12 @@ public:
 	const glm::vec3& getScale() const;
 	void setScale(const glm::vec3& scale);
 
+	const glm::mat4& getWorldMatrix() const;
+	const glm::mat4& getLocalMatrix() const;
+
+	bool isDirty() const;
+
+	void clearDirty();
 private:
 	struct Impl;
 	Impl* dImpl;

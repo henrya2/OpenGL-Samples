@@ -13,7 +13,19 @@ struct Transform::Impl
 
 	glm::mat4 localMatrix;
 	glm::mat4 matrix;
+
+	bool dirty;
 };
+
+const glm::mat4& Transform::getWorldMatrix() const
+{
+	return dImpl->matrix;
+}
+
+const glm::mat4& Transform::getLocalMatrix() const
+{
+	return dImpl->localMatrix;
+}
 
 Transform::Transform()
 {
@@ -33,6 +45,7 @@ const glm::vec3& Transform::getPosition() const
 void Transform::setPosition(const glm::vec3& position)
 {
 	dImpl->position = position;
+	dImpl->dirty = true;
 }
 
 const glm::quat& Transform::getRotation() const
@@ -43,6 +56,7 @@ const glm::quat& Transform::getRotation() const
 void Transform::setRotation(const glm::quat& rotation)
 {
 	dImpl->rotation = rotation;
+	dImpl->dirty = true;
 }
 
 const glm::vec3& Transform::getScale() const
@@ -53,4 +67,15 @@ const glm::vec3& Transform::getScale() const
 void Transform::setScale(const glm::vec3& scale)
 {
 	dImpl->scale = scale;
+	dImpl->dirty = true;
+}
+
+bool Transform::isDirty() const
+{
+	return dImpl->dirty;
+}
+
+void Transform::clearDirty()
+{
+	dImpl->dirty = false;
 }

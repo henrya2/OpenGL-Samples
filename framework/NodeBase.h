@@ -7,37 +7,40 @@
 class Camera;
 class IComponent;
 
-class SceneNode
+class NodeBase
 {
 	friend class Scene;
 	friend class Director;
 	friend class IComponent;
+	friend class Camera;
 public:
-	SceneNode();
-	virtual ~SceneNode();
+	NodeBase();
+	virtual ~NodeBase();
 
-	virtual void render(const Camera& camera) const;
+	virtual void onRender(const Camera& camera) const;
 	virtual void onUpdate() {}
 
 	virtual void onLateUpdate() {}
 
-	SceneNode* getParent();
+	NodeBase* getParent();
 
-	void addChild(SceneNode* node);
-	void removeChild(SceneNode* node);
+	void addChild(NodeBase* node);
+	void removeChild(NodeBase* node);
 
-	const std::vector<SceneNode*>& getAllChildren() const { return mChildren; }
+	const std::vector<NodeBase*>& getAllChildren() const { return mChildren; }
 
 	Transform* getTransform() { return mTransform; }
 
 	template <typename T>
 	void addComponent()
 	{
-		T* component = new T();
+		IComponent* component = new T();
 
 		component->setSceneNode(this);
 
 		mComponents.push_back(component);
+
+		component->onAttached();
 	}
 	
 	template <typename T>
@@ -50,6 +53,7 @@ public:
 			if (typeid(T) == typeid(*component))
 			{
 				component->setSceneNode(nullptr);
+				component->onDettached();
 				iter = mComponents.erase(iter);
 				break;
 			}
@@ -73,20 +77,22 @@ public:
 	}
 
 protected:
-	void onParentChanged(SceneNode* newParent) {}
+	void onParentChanged(NodeBase* newParent) {}
 
 private:
-	void setParent(SceneNode* parent);
+	void setParent(NodeBase* parent);
 
 	void internalUpdate();
 
 	void internalLateUpdate();
-private:
-	SceneNode* mParent;
+	void cameraRender(const Camera& camera) const;
+protected:
+	NodeBase* mParent;
 
 	Transform* mTransform;
+private:
 
 	std::vector<IComponent*> mComponents;
 
-	std::vector<SceneNode*> mChildren;
+	std::vector<NodeBase*> mChildren;
 };

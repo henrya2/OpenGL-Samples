@@ -173,6 +173,22 @@ enum class KeyCode : int
 	NUMBER_OF_KEYS,
 };
 
+enum class MouseButtonCode : int
+{
+	MouseButton1 = 0,
+	MouseButton2,
+	MouseButton3,
+	MouseButton4,
+	MouseButton5,
+	MouseButton6,
+	MouseButton7,
+	MouseButton8,
+	MouseButtonLast = MouseButton8,
+	MouseButtonLeft = MouseButton1,
+	MouseButtonRight = MouseButton2,
+	MouseButtonMiddle = MouseButton3
+};
+
 class Event
 {
 public:
@@ -180,7 +196,8 @@ public:
 	{
 		KEYBOARD,
 		ACCELERATION,
-		MOUSE,
+		MOUSE_BUTTON,
+		MOUSE_MOVE,
 		FOCUS,
 		CUSTOM
 	};

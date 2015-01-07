@@ -3,7 +3,7 @@
 #include <glm/glm.hpp>
 #include "IComponent.h"
 
-class SceneNode;
+class NodeBase;
 
 class Camera : public IComponent
 {
@@ -28,10 +28,15 @@ public:
 
 	const glm::mat4& getVP() const;
 
-	void render(SceneNode* sceneNode);
+	void renderNodes(NodeBase* sceneNode);
+	void lastUpdate();
 
 	virtual void onUpdate();
 	virtual void onLateUpdate();
+
+	virtual void onAttached();
+
+	virtual void onDettached();
 private:
 	struct Impl;
 	Impl* dImpl;

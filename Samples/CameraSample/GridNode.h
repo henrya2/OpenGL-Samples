@@ -1,14 +1,14 @@
-#include "SceneNode.h"
+#include "NodeBase.h"
 
 #include "GLSLProgram.h"
 
-class GridNode : public SceneNode
+class GridNode : public NodeBase
 {
 public:
 	GridNode(int width = 10, int depth = 10);
 	virtual ~GridNode();
 
-	virtual void render(const Camera& camera) const override;
+	virtual void onRender(const Camera& camera) const override;
 
 private:
 	GLSLProgram* mGLSLProgram;

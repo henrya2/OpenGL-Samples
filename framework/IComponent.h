@@ -1,6 +1,7 @@
 #pragma once
 
-class SceneNode;
+class NodeBase;
+class Camera;
 
 class IComponent
 {
@@ -12,14 +13,18 @@ public:
 	}
 	~IComponent() {}
 
+	virtual void onRender(const Camera& camera) {};
 	virtual void onUpdate() {};
 	virtual void onLateUpdate() {};
 
-	SceneNode* getSceneNode() { return mSceneNode; }
+	NodeBase* getSceneNode() { return mSceneNode; }
+
+	virtual void onAttached() {}
+	virtual void onDettached() {}
 
 protected:
-	void setSceneNode(SceneNode* sceneNode) { mSceneNode = sceneNode; }
+	void setSceneNode(NodeBase* sceneNode) { mSceneNode = sceneNode; }
 
 protected:
-	SceneNode* mSceneNode;
+	NodeBase* mSceneNode;
 };

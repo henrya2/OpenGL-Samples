@@ -2,8 +2,9 @@
 #include <glm/gtc/quaternion.hpp>
 #include <glm/gtx/euler_angles.hpp>
 
+#include "LastUpdatePriorityCommon.h"
 #include "Camera.h"
-#include "SceneNode.h"
+#include "NodeBase.h"
 #include "Director.h"
 #include "Scene.h"
 
@@ -74,7 +75,7 @@ void Camera::setProjection(float fovy, float aspectRatio, float near /*= 0.1f*/,
 	dImpl->near = near;
 	dImpl->far = far;
 
-	dImpl->projectionMat = glm::perspective(fovy, aspectRatio, near, far);
+	dImpl->projectionMat = glm::perspective(glm::radians(fovy), aspectRatio, near, far);
 }
 
 const glm::mat4& Camera::getViewMatrix() const
@@ -86,7 +87,7 @@ void Camera::updateViewMatrix()
 {
 	updateTransformMatrix();
 
-	dImpl->viewMat = glm::transpose(dImpl->transformMat);
+	dImpl->viewMat = glm::inverse(dImpl->transformMat);
 }
 
 void Camera::updateTransformMatrix()
@@ -95,14 +96,14 @@ void Camera::updateTransformMatrix()
 	dImpl->transformMat = glm::translate(matrix, dImpl->position);
 }
 
-void Camera::render(SceneNode* sceneNode)
+void Camera::renderNodes(NodeBase* sceneNode)
 {
-	sceneNode->render(*this);
-
 	for (auto childNode : sceneNode->getAllChildren())
 	{
-		childNode->render(*this);
+		childNode->cameraRender(*this);
 	}
+
+	sceneNode->cameraRender(*this);
 }
 
 const glm::mat4& Camera::getVP() const
@@ -115,18 +116,44 @@ const glm::mat4& Camera::getVP() const
 
 void Camera::onLateUpdate()
 {
-	if (mSceneNode)
-	{
-		Transform* nodeTransform = mSceneNode->getTransform();
 
-		setPosition(nodeTransform->getPosition());
-		setRotation(nodeTransform->getRotation());
-
-		render(Director::getInstance()->getRunningScene());
-	}
 }
 
 void Camera::onUpdate()
 {
 
+}
+
+void Camera::onAttached()
+{
+	Scene* runningScene = Director::getInstance()->getRunningScene();
+	if (runningScene)
+	{
+		runningScene->registerLastUpdate(this, CAMERA_UPDATE_PRIORITY, std::bind(&Camera::lastUpdate, this));
+	}
+}
+
+void Camera::onDettached()
+{
+	Scene* runningScene = Director::getInstance()->getRunningScene();
+	if (runningScene)
+	{
+		runningScene->unRegisterLastUpdate(this);
+	}
+}
+
+void Camera::lastUpdate()
+{
+	if (mSceneNode)
+	{
+		Transform* nodeTransform = mSceneNode->getTransform();
+
+		if (nodeTransform->isDirty())
+		{
+			setPosition(nodeTransform->getPosition());
+			setRotation(nodeTransform->getRotation());
+		}
+
+		renderNodes(Director::getInstance()->getRunningScene());
+	}
 }
