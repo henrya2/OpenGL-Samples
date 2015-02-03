@@ -1,6 +1,6 @@
 #include "GlfwOpenGLWindow.h"
 #include "GlfwOpenGLInputManager.h"
-#include "EventKeyboard.h"
+#include "EventTypeDefines.h"
 #include <gl/glew.h>
 #include <glfw/glfw3.h>
 #include <iostream>
@@ -169,21 +169,28 @@ static void SizeChangedCallBack(GLFWwindow* window, int width, int height)
 	glfwOpenGLWindow->notifyViewSizeChanged(width, height);
 }
 
+static void MousePositionCallback(GLFWwindow* window, double xPos, double yPos)
+{
+	GlfwOpenGLWindow* glfwOpenGLWindow = allGlfwWindows[window];
+	GlfwOpenGLInputManager* openGLInputManager = (GlfwOpenGLInputManager*)glfwOpenGLWindow->getInputManager();
+
+	openGLInputManager->processMousePosition(xPos, yPos);
+}
+
 static void MouseButtonCallBack(GLFWwindow* window, int button, int action, int modify)
 {
 	GlfwOpenGLWindow* glfwOpenGLWindow = allGlfwWindows[window];
 	GlfwOpenGLInputManager* openGLInputManager = (GlfwOpenGLInputManager*)glfwOpenGLWindow->getInputManager();
+
+	openGLInputManager->processMouseButton(button, action, modify);
 }
 
 static void KeyboardCallBack(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-	if (action != GLFW_REPEAT)
-	{
-		GlfwOpenGLWindow* glfwOpenGLWindow = allGlfwWindows[window];
-		GlfwOpenGLInputManager* openGLInputManager = (GlfwOpenGLInputManager*)glfwOpenGLWindow->getInputManager();
+	GlfwOpenGLWindow* glfwOpenGLWindow = allGlfwWindows[window];
+	GlfwOpenGLInputManager* openGLInputManager = (GlfwOpenGLInputManager*)glfwOpenGLWindow->getInputManager();
 
-		openGLInputManager->notifyEvent(EventKeyboard(g_keyCodeMap[key], action == GLFW_PRESS));
-	}
+	openGLInputManager->processKeyboard(key, scancode, action, mods);
 }
 
 GlfwOpenGLWindow::GlfwOpenGLWindow()
@@ -212,6 +219,7 @@ void GlfwOpenGLWindow::createWindow(const std::string& title, int width, int hei
 
 	glfwSetWindowSizeCallback(mGlfwWindow, &SizeChangedCallBack);
 	glfwSetMouseButtonCallback(mGlfwWindow, &MouseButtonCallBack);
+	glfwSetCursorPosCallback(mGlfwWindow, &MousePositionCallback);
 	glfwSetKeyCallback(mGlfwWindow, &KeyboardCallBack);
 }
 

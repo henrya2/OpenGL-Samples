@@ -2,6 +2,10 @@
 #include "Scene.h"
 #include "CameraSample.h"
 
+#include "Utils.h"
+
+#include <iostream>
+
 GLSLProgram glslProgram;
 
 const float vertexPositions[] = {
@@ -25,12 +29,31 @@ CameraSample::~CameraSample()
 
 void CameraSample::onUpdate()
 {
+	static int testCount = 0;
+
+	testCount++;
+
 	IInputManager* inputManager = Director::getInstance()->getInputManager();
 
 	if (inputManager->isKeyPressed(KeyCode::KEY_A))
 	{
 		printf("KeyCode::KEY_A is pressed\n");
 	}
+
+	static auto oldMousePosition = inputManager->getMousePosition();
+
+	auto mousePosition = inputManager->getMousePosition();
+
+	std::tuple_element<0, decltype(mousePosition)>::type posX = std::get<0>(mousePosition);
+	std::tuple_element<1, decltype(mousePosition)>::type posY = std::get<1>(mousePosition);
+
+	if (oldMousePosition != mousePosition)
+	{
+		std::cout << "MousePosX: " << posX << ", " << "MousePosY: " << posY << std::endl;
+		std::cout << "DeltaPosX: " << inputManager->getMouseDeltaX() << ", " << "DeltaPosY: " << inputManager->getMouseDeltaY() << std::endl;
+	}
+
+	oldMousePosition = mousePosition;
 }
 
 void CameraSample::onRender()
@@ -120,6 +143,15 @@ void CameraSample::customInit()
 
 	glBindVertexArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	std::vector<glm::vec3> verts;
+	std::vector<glm::u16> indices;
+
+	glm::vec3 center(0, 0, 0);
+
+	Utils::genTriGrid(100, 100, 1.0f, 1.0f, center, verts, indices);
+
+	printf("\n");
 }
 
 /* Our program's entry point */
