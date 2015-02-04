@@ -11,7 +11,7 @@ struct Scene::LastUpdateStructTypeCompare
 
 Scene::Scene()
 {
-
+	mScene = this;
 }
 
 void Scene::registerLastUpdate(IComponent* component, int priority, LastUpdateFunctorType functor)

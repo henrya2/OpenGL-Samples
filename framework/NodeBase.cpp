@@ -7,15 +7,68 @@ NodeBase* NodeBase::getParent()
 	return mParent;
 }
 
+Scene* NodeBase::getAttachedScene()
+{
+	return mScene;
+}
+
 void NodeBase::setParent(NodeBase* parent)
 {
 	onParentChanged(parent);
+
+	if (parent != nullptr)
+	{
+		if (mScene != nullptr)
+		{
+			DetachToScene();
+		}
+
+		if (mScene != parent->getAttachedScene())
+		{
+			mScene = parent->getAttachedScene();
+			AttachToScene();
+		}
+	}
+	else
+	{
+		if (mScene != nullptr)
+		{
+			DetachToScene();
+		}
+
+		mScene = nullptr;
+	}
+
 	mParent = parent;
+}
+
+void NodeBase::AttachToScene()
+{
+	onAttachedToScene();
+
+	for (auto component : mComponents)
+	{
+		component->onAttachedToScene();
+	}
+}
+
+void NodeBase::DetachToScene()
+{
+	_alreadyPassFirstUpdate = false;
+
+	onDetachedToScene();
+
+	for (auto component : mComponents)
+	{
+		component->onDetachedToScene();
+	}
 }
 
 NodeBase::NodeBase()
 {
 	mTransform = new Transform();
+
+	_alreadyPassFirstUpdate = false;
 }
 
 NodeBase::~NodeBase()
@@ -40,6 +93,12 @@ void NodeBase::removeChild(NodeBase* node)
 
 void NodeBase::internalUpdate()
 {
+	if (!_alreadyPassFirstUpdate)
+	{
+		start();
+		_alreadyPassFirstUpdate = true;
+	}
+
 	onUpdate();
 
 	for (auto component : mComponents)

@@ -1,9 +1,13 @@
 #pragma once
 
 #include <glm/glm.hpp>
+#include <functional>
+#include <map>
 
 class Transform
 {
+public:
+	typedef std::function<void(const Transform& transform)> TransformChangedCallback;
 public:
 	Transform();
 	virtual ~Transform();
@@ -23,7 +27,16 @@ public:
 	bool isDirty() const;
 
 	void clearDirty();
+
+	int addChangedCallback(TransformChangedCallback callback);
+	void removeChangedCallback(int id);
+
+protected:
+	void notifyChanged() const;
 private:
 	struct Impl;
 	Impl* dImpl;
+
+	int _nextCallbackId;
+	std::map<int, TransformChangedCallback> mCallbackmaps;
 };

@@ -4,6 +4,7 @@
 #include "IComponent.h"
 
 class NodeBase;
+class Transform;
 
 class Camera : public IComponent
 {
@@ -37,6 +38,13 @@ public:
 	virtual void onAttached();
 
 	virtual void onDettached();
+
+	void onTransformChanged(const Transform& transform);
+
+	virtual void onAttachedToScene();
+
+	virtual void onDetachedToScene();
+
 private:
 	struct Impl;
 	Impl* dImpl;

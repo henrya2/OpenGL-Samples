@@ -5,6 +5,7 @@ class Camera;
 
 class IComponent
 {
+	friend NodeBase;
 public:
 	IComponent()
 		: mSceneNode(nullptr)
@@ -21,6 +22,9 @@ public:
 
 	virtual void onAttached() {}
 	virtual void onDettached() {}
+
+	virtual void onAttachedToScene() {}
+	virtual void onDetachedToScene() {}
 
 protected:
 	void setSceneNode(NodeBase* sceneNode) { mSceneNode = sceneNode; }

@@ -7,6 +7,7 @@
 #include "NodeBase.h"
 #include "Director.h"
 #include "Scene.h"
+#include "Transform.h"
 
 struct Camera::Impl
 {
@@ -26,6 +27,8 @@ struct Camera::Impl
 	// view
 
 	glm::mat4 viewMat;
+
+	int _transformChangedCallbackId;
 };
 
 Camera::Camera()
@@ -126,21 +129,34 @@ void Camera::onUpdate()
 
 void Camera::onAttached()
 {
-	Scene* runningScene = Director::getInstance()->getRunningScene();
-	if (runningScene)
-	{
-		runningScene->registerLastUpdate(this, CAMERA_UPDATE_PRIORITY, std::bind(&Camera::lastUpdate, this));
-	}
+	dImpl->_transformChangedCallbackId = getSceneNode()->getTransform()->addChangedCallback(std::bind(&Camera::onTransformChanged, this, std::placeholders::_1));
 }
 
 void Camera::onDettached()
 {
-	Scene* runningScene = Director::getInstance()->getRunningScene();
-	if (runningScene)
+	getSceneNode()->getTransform()->removeChangedCallback(dImpl->_transformChangedCallbackId);
+}
+
+void Camera::onAttachedToScene()
+{
+	Scene* scene = getSceneNode()->getAttachedScene();
+
+	if (scene)
 	{
-		runningScene->unRegisterLastUpdate(this);
+		scene->registerLastUpdate(this, CAMERA_UPDATE_PRIORITY, std::bind(&Camera::lastUpdate, this));
 	}
 }
+
+void Camera::onDetachedToScene()
+{
+	Scene* scene = getSceneNode()->getAttachedScene();
+
+	if (scene)
+	{
+		scene->unRegisterLastUpdate(this);
+	}
+}
+
 
 void Camera::lastUpdate()
 {
@@ -148,12 +164,12 @@ void Camera::lastUpdate()
 	{
 		Transform* nodeTransform = mSceneNode->getTransform();
 
-		if (nodeTransform->isDirty())
-		{
-			setPosition(nodeTransform->getPosition());
-			setRotation(nodeTransform->getRotation());
-		}
-
 		renderNodes(Director::getInstance()->getRunningScene());
 	}
+}
+
+void Camera::onTransformChanged(const Transform& transform)
+{
+	setPosition(transform.getPosition());
+	setRotation(transform.getRotation());
 }

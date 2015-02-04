@@ -28,6 +28,7 @@ const glm::mat4& Transform::getLocalMatrix() const
 }
 
 Transform::Transform()
+	: _nextCallbackId(1)
 {
 	dImpl = new Impl();
 }
@@ -46,6 +47,8 @@ void Transform::setPosition(const glm::vec3& position)
 {
 	dImpl->position = position;
 	dImpl->dirty = true;
+
+	notifyChanged();
 }
 
 const glm::quat& Transform::getRotation() const
@@ -57,6 +60,8 @@ void Transform::setRotation(const glm::quat& rotation)
 {
 	dImpl->rotation = rotation;
 	dImpl->dirty = true;
+
+	notifyChanged();
 }
 
 const glm::vec3& Transform::getScale() const
@@ -68,6 +73,16 @@ void Transform::setScale(const glm::vec3& scale)
 {
 	dImpl->scale = scale;
 	dImpl->dirty = true;
+
+	notifyChanged();
+}
+
+void Transform::notifyChanged() const
+{
+	for (auto& callbackPair : mCallbackmaps)
+	{
+		callbackPair.second(*this);
+	}
 }
 
 bool Transform::isDirty() const
@@ -78,4 +93,18 @@ bool Transform::isDirty() const
 void Transform::clearDirty()
 {
 	dImpl->dirty = false;
+}
+
+int Transform::addChangedCallback(TransformChangedCallback callback)
+{
+	int callbackId = _nextCallbackId++;
+
+	mCallbackmaps[callbackId] = callback;
+
+	return callbackId;
+}
+
+void Transform::removeChangedCallback(int id)
+{
+	mCallbackmaps.erase(id);
 }
