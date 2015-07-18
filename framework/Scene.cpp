@@ -40,3 +40,11 @@ void Scene::unRegisterLastUpdate(IComponent* componet)
 		mLastUpdateComponents.erase(iter);
 	}
 }
+
+void Scene::internalLastUpdate()
+{
+	for (auto componentToUpdate : mLastUpdateComponents)
+	{
+		componentToUpdate.functor();
+	}
+}

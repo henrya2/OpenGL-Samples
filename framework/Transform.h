@@ -29,6 +29,7 @@ public:
 	void clearDirty();
 
 	int addChangedCallback(TransformChangedCallback callback);
+
 	void removeChangedCallback(int id);
 
 protected:

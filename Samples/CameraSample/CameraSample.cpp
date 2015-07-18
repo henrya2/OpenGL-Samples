@@ -2,9 +2,12 @@
 #include "Scene.h"
 #include "CameraSample.h"
 
+#include "CameraNode.h"
+
 #include "Utils.h"
 
 #include <iostream>
+#include "GridNode.h"
 
 GLSLProgram glslProgram;
 
@@ -107,6 +110,12 @@ bool CameraSample::onBeforeRun()
 	}
 
 	Director::getInstance()->runWithScene(new Scene());
+
+	CameraNode* cameraNode = new CameraNode;
+	Director::getInstance()->getRunningScene()->addChild(cameraNode);
+
+	//GridNode* gridNode = new GridNode;
+	//Director::getInstance()->getRunningScene()->addChild(gridNode);
 
 	customInit();
 

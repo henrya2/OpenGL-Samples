@@ -29,8 +29,8 @@ public:
 	virtual void onDetachedToScene() {};
 
 	Scene* getAttachedScene();
-	void AttachToScene();
-	void DetachToScene();
+	void attachToScene();
+	void detachFromScene();
 
 	NodeBase* getParent();
 

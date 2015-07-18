@@ -43,7 +43,10 @@ void Director::mainLoop()
 	if (mCurrentScene)
 	{
 		mCurrentScene->internalUpdate();
+
 		mCurrentScene->internalLateUpdate();
+
+		mCurrentScene->internalLastUpdate();
 	}
 }
 

@@ -24,10 +24,13 @@ public:
 	};
 
 	void registerLastUpdate(IComponent* component, int priority, LastUpdateFunctorType functor);
+
 	void unRegisterLastUpdate(IComponent* componet);
 
 private:
 	void internalLastUpdate();
+
+private:
 
 	std::vector<LastUpdateStructType> mLastUpdateComponents;
 

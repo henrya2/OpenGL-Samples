@@ -63,13 +63,18 @@ void GLSLProgram::loadShader(GLSLShaderType type, const std::string& fileName)
 	}
 
 	// Get file contents
-	std::stringstream sourceCode;
-	sourceCode << inFile.rdbuf();
+	inFile.seekg(0, std::ios::end);
+	size_t fileSize = inFile.tellg();
+	inFile.seekg(0);
+
+	std::string strSourceCode;
+	strSourceCode.resize(fileSize);
+	inFile.read(&strSourceCode[0], fileSize);
 	inFile.close();
 
 	try
 	{
-		compileShader(type, sourceCode.str());
+		compileShader(type, strSourceCode);
 	}
 	catch (GLSLProgramException& e)
 	{

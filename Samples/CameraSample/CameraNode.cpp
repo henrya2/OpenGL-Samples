@@ -26,6 +26,8 @@ void CameraNode::start()
 void CameraNode::onAttachedToScene()
 {
 	auto cameraComponent = getComponent<Camera>();
+
 	glm::ivec2 viewSize = Director::getInstance()->getWindow()->getViewSize();
 	cameraComponent->setProjection(90.0f, (float)viewSize.x / viewSize.y);
 }
+

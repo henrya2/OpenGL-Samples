@@ -20,20 +20,20 @@ void NodeBase::setParent(NodeBase* parent)
 	{
 		if (mScene != nullptr)
 		{
-			DetachToScene();
+			detachFromScene();
 		}
 
 		if (mScene != parent->getAttachedScene())
 		{
 			mScene = parent->getAttachedScene();
-			AttachToScene();
+			attachToScene();
 		}
 	}
 	else
 	{
 		if (mScene != nullptr)
 		{
-			DetachToScene();
+			detachFromScene();
 		}
 
 		mScene = nullptr;
@@ -42,7 +42,7 @@ void NodeBase::setParent(NodeBase* parent)
 	mParent = parent;
 }
 
-void NodeBase::AttachToScene()
+void NodeBase::attachToScene()
 {
 	onAttachedToScene();
 
@@ -52,7 +52,7 @@ void NodeBase::AttachToScene()
 	}
 }
 
-void NodeBase::DetachToScene()
+void NodeBase::detachFromScene()
 {
 	_alreadyPassFirstUpdate = false;
 
@@ -65,6 +65,8 @@ void NodeBase::DetachToScene()
 }
 
 NodeBase::NodeBase()
+	: mScene(nullptr)
+	, mParent(nullptr)
 {
 	mTransform = new Transform();
 
@@ -114,8 +116,6 @@ void NodeBase::internalUpdate()
 
 void NodeBase::internalLateUpdate()
 {
-	onLateUpdate();
-
 	for (auto component : mComponents)
 	{
 		component->onLateUpdate();
@@ -125,6 +125,8 @@ void NodeBase::internalLateUpdate()
 	{
 		child->internalLateUpdate();
 	}
+
+	onLateUpdate();
 
 	mTransform->clearDirty();
 }
