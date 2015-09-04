@@ -36,7 +36,7 @@ public:
 	void processMouseButton(int button, int action, int modify);
 	void processKeyboard(int key, int scancode, int action, int mods);
 
-	void clearEventStates();
+	virtual void clearEventStates() override;
 
 protected:
 	GlfwOpenGLInputManager(GlfwOpenGLWindow* openGLWindow);
@@ -55,4 +55,6 @@ private:
 
 	double _deltaXPos;
 	double _deltaYPos;
+
+	bool _firstMouseMove;
 };

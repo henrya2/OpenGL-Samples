@@ -292,6 +292,7 @@ bool GlfwOpenGLWindow::windowShouldClose() const
 
 void GlfwOpenGLWindow::pollEvents()
 {
+	mInputManager->clearEventStates();
 	glfwPollEvents();
 }
 

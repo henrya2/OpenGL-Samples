@@ -26,4 +26,6 @@ public:
 	virtual std::tuple<double, double> getMouseDelta() const = 0;
 
 	virtual bool isMouseButtonDown(MouseButtonCode buttonCode) const = 0;
+
+	virtual void clearEventStates() = 0;
 };

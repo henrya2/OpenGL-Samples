@@ -13,7 +13,7 @@ struct Camera::Impl
 {
 	glm::mat4 transformMat;
 	glm::vec3 position;
-	glm::quat rotation;
+	glm::vec3 rotation;
 
 
 	// projection
@@ -49,14 +49,14 @@ const glm::vec3& Camera::getPosition() const
 	return dImpl->position;
 }
 
-void Camera::setRotation(const glm::quat& rot)
+void Camera::setRotation(const glm::vec3& rot)
 {
 	dImpl->rotation = rot;
 
 	updateViewMatrix();
 }
 
-const glm::quat& Camera::getRotation() const
+const glm::vec3& Camera::getRotation() const
 {
 	return dImpl->rotation;
 }
@@ -95,7 +95,7 @@ void Camera::updateViewMatrix()
 
 void Camera::updateTransformMatrix()
 {
-	glm::mat4 matrix = glm::mat4_cast(dImpl->rotation);
+	glm::mat4 matrix = glm::mat4_cast(glm::quat(dImpl->rotation));
 	dImpl->transformMat = glm::translate(matrix, dImpl->position);
 }
 

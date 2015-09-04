@@ -155,6 +155,8 @@ GlfwOpenGLInputManager::GlfwOpenGLInputManager(GlfwOpenGLWindow* openGLWindow)
 	glfwGetCursorPos(mGlfwOpenGLWindow->getInternalGlfwWindow(), &_oldXMousePos, &_oldYMousePos);
 	_deltaXPos = 0;
 	_deltaYPos = 0;
+
+	_firstMouseMove = true;
 }
 
 bool GlfwOpenGLInputManager::isKeyPressed(KeyCode keyCode) const
@@ -182,7 +184,8 @@ void GlfwOpenGLInputManager::notifyEvent(const Event& event)
 
 void GlfwOpenGLInputManager::clearEventStates()
 {
-
+	_deltaXPos = 0;
+	_deltaYPos = 0;
 }
 
 double GlfwOpenGLInputManager::getMousePosX() const
@@ -249,8 +252,17 @@ void GlfwOpenGLInputManager::processMousePosition(double xPos, double yPos)
 	double deltaX = xPos - _oldXMousePos;
 	double deltaY = yPos - _oldYMousePos;
 
-	_deltaXPos = deltaX;
-	_deltaYPos = deltaY;
+	if (_firstMouseMove)
+	{
+		_firstMouseMove = false;
+		_deltaXPos = 0;
+		_deltaYPos = 0;
+	}
+	else
+	{
+		_deltaXPos = deltaX;
+		_deltaYPos = deltaY;
+	}
 
 	EventMousePosition eventMousePosition;
 	eventMousePosition.setPositon(xPos, yPos);

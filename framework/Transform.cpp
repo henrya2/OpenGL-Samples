@@ -8,8 +8,8 @@ struct Transform::Impl
 	glm::vec3 position;
 	glm::vec3 scale;
 	glm::vec3 localScale;
-	glm::quat localRotation;
-	glm::quat rotation;
+	glm::vec3 localRotation;
+	glm::vec3 rotation;
 
 	glm::mat4 localMatrix;
 	glm::mat4 matrix;
@@ -51,12 +51,12 @@ void Transform::setPosition(const glm::vec3& position)
 	notifyChanged();
 }
 
-const glm::quat& Transform::getRotation() const
+const glm::vec3& Transform::getRotation() const
 {
 	return dImpl->rotation;
 }
 
-void Transform::setRotation(const glm::quat& rotation)
+void Transform::setRotation(const glm::vec3& rotation)
 {
 	dImpl->rotation = rotation;
 	dImpl->dirty = true;

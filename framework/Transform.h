@@ -1,6 +1,7 @@
 #pragma once
 
 #include <glm/glm.hpp>
+#include <glm/gtc/quaternion.hpp>
 #include <functional>
 #include <map>
 
@@ -15,8 +16,8 @@ public:
 	const glm::vec3& getPosition() const;
 	void setPosition(const glm::vec3& position);
 
-	const glm::quat& getRotation() const;
-	void setRotation(const glm::quat& rotation);
+	const glm::vec3& getRotation() const;
+	void setRotation(const glm::vec3& rotation);
 
 	const glm::vec3& getScale() const;
 	void setScale(const glm::vec3& scale);

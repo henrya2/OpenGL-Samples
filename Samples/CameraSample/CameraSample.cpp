@@ -38,11 +38,6 @@ void CameraSample::onUpdate(double delta)
 
 	IInputManager* inputManager = Director::getInstance()->getInputManager();
 
-	if (inputManager->isKeyPressed(KeyCode::KEY_A))
-	{
-		printf("KeyCode::KEY_A is pressed\n");
-	}
-
 	static auto oldMousePosition = inputManager->getMousePosition();
 
 	auto mousePosition = inputManager->getMousePosition();
