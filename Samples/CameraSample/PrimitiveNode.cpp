@@ -60,6 +60,11 @@ PrimitiveNode::PrimitiveNode(int width /*= 10*/, int depth /*= 10*/)
 	glGenBuffers(1, &mIBOId);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mIBOId);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
+	glBindVertexArray(0);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
 PrimitiveNode::~PrimitiveNode()
