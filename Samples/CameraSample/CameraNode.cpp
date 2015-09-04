@@ -3,6 +3,8 @@
 #include "Director.h"
 #include "IWindow.h"
 
+#include <glm/gtc/matrix_transform.hpp>
+
 CameraNode::CameraNode()
 {
 	auto cameraComponent = addComponent<Camera>();
@@ -27,28 +29,26 @@ void CameraNode::onUpdate(double delta)
 	}
 	*/
 	glm::vec3 position = getTransform()->getPosition();
+	glm::vec3 moveOffset;
 	glm::vec3 rotationEuler = getTransform()->getRotation();
 
 	glm::mat3 rotationMat = glm::mat3_cast(glm::quat(rotationEuler));
 
-	glm::vec3 zAxis = glm::normalize(rotationMat[2]);
-	glm::vec3 xAxis = glm::normalize(rotationMat[0]);
-
 	if (inputManager->isKeyPressed(KeyCode::KEY_W))
 	{
-		position -= MOVE_SPEED * fDelta * zAxis;
+		moveOffset.z -= MOVE_SPEED * fDelta;
 	}
 	if (inputManager->isKeyPressed(KeyCode::KEY_S))
 	{
-		position += MOVE_SPEED * fDelta * zAxis;
+		moveOffset.z += MOVE_SPEED * fDelta;
 	}
 	if (inputManager->isKeyPressed(KeyCode::KEY_A))
 	{
-		position -= MOVE_SPEED * fDelta * xAxis;
+		moveOffset.x -= MOVE_SPEED * fDelta;
 	}
 	if (inputManager->isKeyPressed(KeyCode::KEY_D))
 	{
-		position += MOVE_SPEED * fDelta * xAxis;
+		moveOffset.x += MOVE_SPEED * fDelta;
 	}
 
 	if (glm::abs(inputManager->getMouseDeltaX()) > glm::epsilon<float>())
@@ -60,9 +60,9 @@ void CameraNode::onUpdate(double delta)
 		rotationEuler.x += inputManager->getMouseDeltaY() * fDelta / 180 * glm::pi<float>() * MOVE_SPEED;
 	}
 
-	if (position != getTransform()->getPosition())
+	if (moveOffset != glm::zero<glm::vec3>())
 	{
-		getTransform()->setPosition(position);
+		getTransform()->setPosition(position + rotationMat * moveOffset);
 	}
 
 	if (rotationEuler != getTransform()->getRotation())

@@ -36,10 +36,10 @@ PrimitiveNode::PrimitiveNode(int width /*= 10*/, int depth /*= 10*/)
 	*/
 
 	glm::vec3 vertices[4];
-	vertices[0] = glm::vec3(-0.75f, 0.75f, 0);
-	vertices[1] = glm::vec3(-0.75f, -0.75f, 0);
-	vertices[2] = glm::vec3(0.75f, -0.75f, 0);
-	vertices[3] = glm::vec3(0.75f, 0.75f, 0);
+	vertices[0] = glm::vec3(-0.75f, 0.75f, 0.75);
+	vertices[1] = glm::vec3(-0.75f, -0.75f, 0.75);
+	vertices[2] = glm::vec3(0.75f, -0.75f, 0.75);
+	vertices[3] = glm::vec3(0.75f, 0.75f, 0.75);
 
 	glGenVertexArrays(1, &vao);
 	glBindVertexArray(vao);
