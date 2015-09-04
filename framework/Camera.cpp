@@ -122,7 +122,7 @@ void Camera::onLateUpdate()
 
 }
 
-void Camera::onUpdate()
+void Camera::onUpdate(double delta)
 {
 
 }

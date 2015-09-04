@@ -9,7 +9,7 @@ public:
 	CameraSample();
 	~CameraSample();
 
-	virtual void onUpdate() override;
+	virtual void onUpdate(double delta) override;
 
 	virtual void onRender();
 

@@ -15,7 +15,7 @@ public:
 	~IComponent() {}
 
 	virtual void onRender(const Camera& camera) {};
-	virtual void onUpdate() {};
+	virtual void onUpdate(double delta) {};
 	virtual void onLateUpdate() {};
 
 	NodeBase* getSceneNode() { return mSceneNode; }

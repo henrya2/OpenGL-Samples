@@ -75,6 +75,10 @@ endif()
 list(APPEND GL_APP_LIBS ${FREEIMAGE_LIBRARY})
 set(FREEIMAGE_BIN_PATH ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/${FREEIMAGE_DIRECTORY}/${FREEIMAGE_BINARY_DIRECTORY}/${FREEIMAGE_BINARY_FILE})
 
+if(WIN32)
+	list(APPEND GL_APP_LIBS Winmm.lib)
+endif()
+
 ##########################################
 # Add framework
 set(FRAMWORK_DIRECTORY framework)

@@ -3,6 +3,10 @@
 #include "SamplesHelper.h"
 #include "GlfwOpenGLWindow.h"
 
+#ifdef WIN32
+#include <windows.h>
+#endif
+
 static Director* s_sharedInstance = nullptr;
 
 Director* Director::getInstance()
@@ -26,6 +30,10 @@ Director::Director()
 void Director::init()
 {
 	SamplesHelper::setupTheCurrentDirectoryToAssets();
+
+#ifdef WIN32
+	timeBeginPeriod(1);
+#endif
 }
 
 void Director::setWindow(IWindow* window)
@@ -38,11 +46,11 @@ IWindow* Director::createDefaultWindow()
 	return new GlfwOpenGLWindow();
 }
 
-void Director::mainLoop()
+void Director::mainLoop(double delta)
 {
 	if (mCurrentScene)
 	{
-		mCurrentScene->internalUpdate();
+		mCurrentScene->internalUpdate(delta);
 
 		mCurrentScene->internalLateUpdate();
 

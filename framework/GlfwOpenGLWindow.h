@@ -35,10 +35,17 @@ public:
 
 	GLFWwindow* getInternalGlfwWindow() const { return mGlfwWindow;  }
 	void notifyViewSizeChanged(int width, int height);
+
+	virtual void setVSync(bool vsync);
+
+	virtual bool isVSync() const;
+
 private:
 	GLFWwindow* mGlfwWindow;
 	GlfwOpenGLInputManager* mInputManager;
 
 	int glMajorVersion;
 	int glMinorVersion;
+
+	bool mVSync;
 };

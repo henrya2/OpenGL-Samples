@@ -196,6 +196,7 @@ static void KeyboardCallBack(GLFWwindow* window, int key, int scancode, int acti
 GlfwOpenGLWindow::GlfwOpenGLWindow()
 	: mGlfwWindow(nullptr)
 	, mInputManager(new GlfwOpenGLInputManager(this))
+	, mVSync(false)
 {
 	g_keyCodeMap.clear();
 	for (auto& item : g_keyCodeStructArray)
@@ -311,4 +312,15 @@ void GlfwOpenGLWindow::notifyViewSizeChanged(int width, int height)
 {
 	if (viewSizeChangedCallback)
 		viewSizeChangedCallback(glm::ivec2(width, height));
+}
+
+void GlfwOpenGLWindow::setVSync(bool vsync)
+{
+	mVSync = vsync;
+	glfwSwapInterval(vsync ? 1 : 0);
+}
+
+bool GlfwOpenGLWindow::isVSync() const
+{
+	return mVSync;
 }

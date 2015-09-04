@@ -15,6 +15,8 @@ public:
 	virtual void setWindowTitle(const std::string& title) = 0;
 	virtual void createWindow(const std::string& title, int width, int height) = 0;
 	virtual bool isWindowCreated() const = 0;
+	virtual void setVSync(bool vsync) = 0;
+	virtual bool isVSync() const = 0;
 	virtual glm::ivec2 getViewSize() const = 0;
 	virtual bool windowShouldClose() const = 0;
 	virtual void pollEvents() = 0;

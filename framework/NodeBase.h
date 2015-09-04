@@ -21,7 +21,7 @@ public:
 	virtual void start() {}
 
 	virtual void onRender(const Camera& camera) const;
-	virtual void onUpdate() {}
+	virtual void onUpdate(double delta) {}
 
 	virtual void onLateUpdate() {}
 
@@ -106,7 +106,7 @@ protected:
 private:
 	void setParent(NodeBase* parent);
 
-	void internalUpdate();
+	void internalUpdate(double delta);
 
 	void internalLateUpdate();
 	void cameraRender(const Camera& camera) const;

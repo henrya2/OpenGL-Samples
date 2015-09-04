@@ -13,9 +13,16 @@ CameraNode::~CameraNode()
 
 }
 
-void CameraNode::onUpdate()
+void CameraNode::onUpdate(double delta)
 {
+	IInputManager* inputManager = Director::getInstance()->getInputManager();
 
+	/*
+	if (true)
+	{
+		printf("timeCount: %f\n", delta);
+	}
+	*/
 }
 
 void CameraNode::start()

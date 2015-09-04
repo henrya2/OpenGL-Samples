@@ -14,7 +14,7 @@ public:
 	IInputManager* getInputManager();
 	void setWindow(IWindow* window);
 
-	void mainLoop();
+	void mainLoop(double delta);
 
 	IWindow* createDefaultWindow();
 

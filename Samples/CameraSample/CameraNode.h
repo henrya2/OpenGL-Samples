@@ -8,7 +8,7 @@ public:
 	CameraNode();
 	~CameraNode();
 
-	virtual void onUpdate() override;
+	virtual void onUpdate(double delta) override;
 
 	virtual void start();
 

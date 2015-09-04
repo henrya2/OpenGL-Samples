@@ -93,7 +93,7 @@ void NodeBase::removeChild(NodeBase* node)
 	}
 }
 
-void NodeBase::internalUpdate()
+void NodeBase::internalUpdate(double delta)
 {
 	if (!_alreadyPassFirstUpdate)
 	{
@@ -101,16 +101,16 @@ void NodeBase::internalUpdate()
 		_alreadyPassFirstUpdate = true;
 	}
 
-	onUpdate();
+	onUpdate(delta);
 
 	for (auto component : mComponents)
 	{
-		component->onUpdate();
+		component->onUpdate(delta);
 	}
 
 	for (auto child : mChildren)
 	{
-		child->internalUpdate();
+		child->internalUpdate(delta);
 	}
 }
 

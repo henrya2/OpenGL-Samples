@@ -30,7 +30,7 @@ CameraSample::~CameraSample()
 
 }
 
-void CameraSample::onUpdate()
+void CameraSample::onUpdate(double delta)
 {
 	static int testCount = 0;
 
