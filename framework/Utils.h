@@ -11,3 +11,5 @@ namespace Utils
 		std::vector<glm::vec3>& verts,
 		std::vector<glm::u16>& indices);
 }
+
+#define BUFFER_OFFSET(x)  ((const void*) (x))

@@ -20,7 +20,11 @@ void CameraNode::onUpdate()
 
 void CameraNode::start()
 {
-
+	Transform* transform = getTransform();
+	if (transform)
+	{
+		transform->setPosition(glm::vec3(0, 0, 2.f));
+	}
 }
 
 void CameraNode::onAttachedToScene()

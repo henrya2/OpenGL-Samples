@@ -7,7 +7,7 @@
 #include "Utils.h"
 
 #include <iostream>
-#include "GridNode.h"
+#include "PrimitiveNode.h"
 
 GLSLProgram glslProgram;
 
@@ -61,6 +61,8 @@ void CameraSample::onUpdate()
 
 void CameraSample::onRender()
 {
+	return;
+
 	glslProgram.use();
 
 	glBindVertexArray(vao);
@@ -114,10 +116,10 @@ bool CameraSample::onBeforeRun()
 	CameraNode* cameraNode = new CameraNode;
 	Director::getInstance()->getRunningScene()->addChild(cameraNode);
 
-	//GridNode* gridNode = new GridNode;
-	//Director::getInstance()->getRunningScene()->addChild(gridNode);
+	PrimitiveNode* primitiveNode = new PrimitiveNode;
+	Director::getInstance()->getRunningScene()->addChild(primitiveNode);
 
-	customInit();
+	//customInit();
 
 	return true;
 }

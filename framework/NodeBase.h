@@ -35,6 +35,7 @@ public:
 	NodeBase* getParent();
 
 	void addChild(NodeBase* node);
+
 	void removeChild(NodeBase* node);
 
 	const std::vector<NodeBase*>& getAllChildren() const { return mChildren; }
