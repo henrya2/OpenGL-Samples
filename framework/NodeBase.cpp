@@ -93,7 +93,7 @@ void NodeBase::removeChild(NodeBase* node)
 	}
 }
 
-void NodeBase::internalUpdate(double delta)
+void NodeBase::internalUpdate(float delta)
 {
 	if (!_alreadyPassFirstUpdate)
 	{

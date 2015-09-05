@@ -46,7 +46,7 @@ IWindow* Director::createDefaultWindow()
 	return new GlfwOpenGLWindow();
 }
 
-void Director::mainLoop(double delta)
+void Director::mainLoop(float delta)
 {
 	if (mCurrentScene)
 	{

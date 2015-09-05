@@ -16,7 +16,7 @@ public:
 
 	void run();
 
-	virtual void onUpdate(double delta);
+	virtual void onUpdate(float delta);
 
 	void setMaxFrame();
 

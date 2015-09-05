@@ -23,9 +23,9 @@ CameraSample::~CameraSample()
 
 #define MOVE_SPEED 30.f
 
-void CameraSample::onUpdate(double delta)
+void CameraSample::onUpdate(float delta)
 {
-	float deltaTime = (float)delta;
+	float deltaTime = delta;
 	IInputManager* inputManager = Director::getInstance()->getInputManager();
 
 	static auto oldMousePosition = inputManager->getMousePosition();

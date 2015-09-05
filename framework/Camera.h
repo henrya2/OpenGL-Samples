@@ -33,7 +33,7 @@ public:
 
 	void lastUpdate();
 
-	virtual void onUpdate(double delta);
+	virtual void onUpdate(float delta);
 
 	virtual void onLateUpdate();
 

@@ -15,7 +15,7 @@ public:
 	~IComponent() {}
 
 	virtual void onRender(const Camera& camera, const glm::mat4& worldMatrix) {};
-	virtual void onUpdate(double delta) {};
+	virtual void onUpdate(float delta) {};
 	virtual void onLateUpdate() {};
 
 	NodeBase* getSceneNode() { return mSceneNode; }

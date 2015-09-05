@@ -18,9 +18,9 @@ CameraNode::~CameraNode()
 
 #define MOVE_SPEED 4
 
-void CameraNode::onUpdate(double delta)
+void CameraNode::onUpdate(float delta)
 {
-	float fDelta = (float)delta;
+	float fDelta = delta;
 	IInputManager* inputManager = Director::getInstance()->getInputManager();
 
 	if (!inputManager->getRelativeMouseMode())

@@ -57,13 +57,13 @@ void Application::run()
 
 		window->pollEvents();
 
-		onUpdate(frameDuration);
+		onUpdate((float)frameDuration);
 
 		onPreRender();
 		onRender();
 		onPostRender();
 
-		director->mainLoop(frameDuration);
+		director->mainLoop((float)frameDuration);
 
 		window->swapBuffers();
 
@@ -85,7 +85,7 @@ void Application::onPostRender()
 
 }
 
-void Application::onUpdate(double delta)
+void Application::onUpdate(float delta)
 {
 
 }

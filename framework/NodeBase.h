@@ -22,7 +22,7 @@ public:
 
 	virtual void onRender(const Camera& camera, const glm::mat4& worldMatrix) const;
 
-	virtual void onUpdate(double delta) {}
+	virtual void onUpdate(float delta) {}
 
 	virtual void onLateUpdate() {}
 
@@ -107,7 +107,7 @@ protected:
 private:
 	void setParent(NodeBase* parent);
 
-	void internalUpdate(double delta);
+	void internalUpdate(float delta);
 
 	void internalLateUpdate();
 	void cameraRender(const Camera& camera, const glm::mat4& parentMatrix) const;
