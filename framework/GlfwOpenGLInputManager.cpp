@@ -169,16 +169,6 @@ bool GlfwOpenGLInputManager::isKeyPressed(KeyCode keyCode) const
 
 void GlfwOpenGLInputManager::notifyEvent(const Event& event)
 {
-	switch (event.getType())
-	{
-	case Event::Type::KEYBOARD:
-		{
-			const EventKeyboard& eventKeyboard = (const EventKeyboard&)event;
-			mKeysMap[static_cast<int>(eventKeyboard.mKeyCode)] = eventKeyboard.mIsPressed;
-		}
-		break;
-	}
-
 	for (auto& eventCallback : mEventCallbacks)
 	{
 		eventCallback.second(event);

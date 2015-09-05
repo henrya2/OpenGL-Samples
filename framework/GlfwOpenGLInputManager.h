@@ -53,7 +53,6 @@ private:
 
 	int mNextCallbackId;
 private:
-	std::bitset<static_cast<int>(KeyCode::NUMBER_OF_KEYS)> mKeysMap;
 
 	double _oldXMousePos;
 	double _oldYMousePos;
