@@ -38,8 +38,13 @@ public:
 
 	virtual void clearEventStates() override;
 
+	virtual void setRelativeMouseMode(bool relativeMode);
+
+	virtual bool getRelativeMouseMode() const;
+
 protected:
 	GlfwOpenGLInputManager(GlfwOpenGLWindow* openGLWindow);
+
 protected:
 	GlfwOpenGLWindow* mGlfwOpenGLWindow;
 

@@ -13,6 +13,8 @@ struct keyCodeItem
 
 static std::unordered_map<KeyCode, int> g_KeyCode2RawGlfwCodeMap;
 
+static std::unordered_map<int, KeyCode> g_RawGlfwCode2KeyCodeMap;
+
 static keyCodeItem g_keyCodeStructArray[] = {
 	/* The unknown key */
 	{ GLFW_KEY_UNKNOWN, KeyCode::KEY_NONE },
@@ -150,6 +152,7 @@ GlfwOpenGLInputManager::GlfwOpenGLInputManager(GlfwOpenGLWindow* openGLWindow)
 	for (auto& keyItem : g_keyCodeStructArray)
 	{
 		g_KeyCode2RawGlfwCodeMap[keyItem.keyCode] = keyItem.glfwKeyCode;
+		g_RawGlfwCode2KeyCodeMap[keyItem.glfwKeyCode] = keyItem.keyCode;
 	}
 
 	glfwGetCursorPos(mGlfwOpenGLWindow->getInternalGlfwWindow(), &_oldXMousePos, &_oldYMousePos);
@@ -186,6 +189,16 @@ void GlfwOpenGLInputManager::clearEventStates()
 {
 	_deltaXPos = 0;
 	_deltaYPos = 0;
+}
+
+void GlfwOpenGLInputManager::setRelativeMouseMode(bool relativeMode)
+{
+	glfwSetInputMode(mGlfwOpenGLWindow->getInternalGlfwWindow(), GLFW_CURSOR, relativeMode ? GLFW_CURSOR_DISABLED : GLFW_CURSOR_NORMAL);
+}
+
+bool GlfwOpenGLInputManager::getRelativeMouseMode() const
+{
+	return glfwGetInputMode(mGlfwOpenGLWindow->getInternalGlfwWindow(), GLFW_CURSOR) == GLFW_CURSOR_DISABLED;
 }
 
 double GlfwOpenGLInputManager::getMousePosX() const
@@ -281,5 +294,7 @@ void GlfwOpenGLInputManager::processMouseButton(int button, int action, int modi
 
 void GlfwOpenGLInputManager::processKeyboard(int key, int scancode, int action, int mods)
 {
+	EventKeyboard eventKeyboard(g_RawGlfwCode2KeyCodeMap[key], action == GLFW_PRESS);
 
+	notifyEvent(eventKeyboard);
 }

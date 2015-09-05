@@ -28,4 +28,8 @@ public:
 	virtual bool isMouseButtonDown(MouseButtonCode buttonCode) const = 0;
 
 	virtual void clearEventStates() = 0;
+
+	virtual void setRelativeMouseMode(bool relativeMode) = 0;
+
+	virtual bool getRelativeMouseMode() const = 0;
 };

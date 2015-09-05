@@ -2,6 +2,7 @@
 #include "Camera.h"
 #include "Director.h"
 #include "IWindow.h"
+#include "EventTypeDefines.h"
 
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -22,12 +23,9 @@ void CameraNode::onUpdate(double delta)
 	float fDelta = (float)delta;
 	IInputManager* inputManager = Director::getInstance()->getInputManager();
 
-	/*
-	if (true)
-	{
-		printf("timeCount: %f\n", delta);
-	}
-	*/
+	if (!inputManager->getRelativeMouseMode())
+		return;
+
 	glm::vec3 position = getTransform()->getPosition();
 	glm::vec3 moveOffset;
 	glm::vec3 rotationEuler = getTransform()->getRotation();
@@ -54,10 +52,21 @@ void CameraNode::onUpdate(double delta)
 	if (glm::abs(inputManager->getMouseDeltaX()) > glm::epsilon<float>())
 	{
 		rotationEuler.y -= inputManager->getMouseDeltaX() * fDelta / 180 * glm::pi<float>() * MOVE_SPEED;
+
+		if (rotationEuler.y > glm::pi<float>())
+		{
+			rotationEuler.y += -glm::pi<float>() * 2;
+		}
+		else if (rotationEuler.y <= -glm::pi<float>())
+		{
+			rotationEuler.y += glm::pi<float>() * 2;
+		}
 	}
 	if (glm::abs(inputManager->getMouseDeltaY()) > glm::epsilon<float>())
 	{
 		rotationEuler.x -= inputManager->getMouseDeltaY() * fDelta / 180 * glm::pi<float>() * MOVE_SPEED;
+
+		rotationEuler.x = glm::clamp(rotationEuler.x, -glm::pi<float>() / 2, glm::pi<float>() / 2);
 	}
 
 	if (moveOffset != glm::zero<glm::vec3>())
@@ -78,6 +87,9 @@ void CameraNode::start()
 	{
 		transform->setPosition(glm::vec3(0, 0, 7.f));
 	}
+
+	IInputManager* inputMananger = Director::getInstance()->getInputManager();
+	inputMananger->addEventListener(std::bind(&CameraNode::handleInputEvent, this, std::placeholders::_1));
 }
 
 void CameraNode::onAttachedToScene()
@@ -86,5 +98,24 @@ void CameraNode::onAttachedToScene()
 
 	glm::ivec2 viewSize = Director::getInstance()->getWindow()->getViewSize();
 	cameraComponent->setProjection(90.0f, (float)viewSize.x / viewSize.y);
+}
+
+void CameraNode::handleInputEvent(const Event& event)
+{
+	IInputManager* inputManager = Director::getInstance()->getInputManager();
+	switch (event.getType())
+	{
+	case Event::Type::KEYBOARD:
+	{
+		const EventKeyboard& eventKeyboard = (const EventKeyboard&)event;
+
+		if (eventKeyboard.mKeyCode == KeyCode::KEY_Q && eventKeyboard.mIsPressed)
+		{
+			bool oldRelativeMode = inputManager->getRelativeMouseMode();
+			inputManager->setRelativeMouseMode(!oldRelativeMode);
+		}
+	}
+	break;
+	}
 }
 

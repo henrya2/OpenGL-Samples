@@ -82,6 +82,8 @@ bool CameraSample::onBeforeRun()
 			return false;
 
 		Director::getInstance()->setWindow(window);
+
+		Director::getInstance()->getInputManager()->setRelativeMouseMode(true);
 	}
 
 	Director::getInstance()->runWithScene(new Scene());
