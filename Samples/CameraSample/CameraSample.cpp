@@ -10,6 +10,8 @@
 #include "PrimitiveNode.h"
 
 CameraSample::CameraSample()
+	: mParentNode(nullptr)
+	, mSubNode(nullptr)
 {
 
 }
@@ -19,8 +21,11 @@ CameraSample::~CameraSample()
 
 }
 
+#define MOVE_SPEED 30.f
+
 void CameraSample::onUpdate(double delta)
 {
+	float deltaTime = (float)delta;
 	IInputManager* inputManager = Director::getInstance()->getInputManager();
 
 	static auto oldMousePosition = inputManager->getMousePosition();
@@ -37,6 +42,15 @@ void CameraSample::onUpdate(double delta)
 	}
 
 	oldMousePosition = mousePosition;
+
+	if (mParentNode)
+	{
+		glm::vec3 parentRotation = mParentNode->getTransform()->getRotation();
+
+		parentRotation.y += MOVE_SPEED / 180.0f * glm::pi<float>() * deltaTime;
+		mParentNode->getTransform()->setRotation(parentRotation);
+	}
+
 }
 
 void CameraSample::onRender()
@@ -94,11 +108,15 @@ bool CameraSample::onBeforeRun()
 	PrimitiveNode* primitiveNode = new PrimitiveNode;
 	Director::getInstance()->getRunningScene()->addChild(primitiveNode);
 
-	primitiveNode = new PrimitiveNode;
-	Director::getInstance()->getRunningScene()->addChild(primitiveNode);
-	primitiveNode->getTransform()->setRotation(glm::vec3(0.0f, glm::quarter_pi<float>(), 0.0f));
-	primitiveNode->getTransform()->setScale(glm::vec3(0.75f, 0.75f, 0.75f));
-	primitiveNode->getTransform()->setPosition(glm::vec3(-5.0f, 0.0f, 0.0f));
+	mParentNode = primitiveNode;
+
+	auto subNode = new PrimitiveNode;
+	primitiveNode->addChild(subNode);
+	subNode->getTransform()->setRotation(glm::vec3(0.0f, glm::quarter_pi<float>(), 0.0f));
+	subNode->getTransform()->setScale(glm::vec3(0.75f, 0.75f, 0.75f));
+	subNode->getTransform()->setPosition(glm::vec3(-5.0f, 0.0f, 0.0f));
+
+	mSubNode = subNode;
 
 	return true;
 }

@@ -20,7 +20,8 @@ public:
 	// when first call to onUpdate
 	virtual void start() {}
 
-	virtual void onRender(const Camera& camera) const;
+	virtual void onRender(const Camera& camera, const glm::mat4& worldMatrix) const;
+
 	virtual void onUpdate(double delta) {}
 
 	virtual void onLateUpdate() {}
@@ -40,7 +41,7 @@ public:
 
 	const std::vector<NodeBase*>& getAllChildren() const { return mChildren; }
 
-	Transform* getTransform() { return mTransform; }
+	Transform* getTransform() const { return mTransform; }
 
 	template <typename T>
 	T* addComponent()
@@ -109,7 +110,7 @@ private:
 	void internalUpdate(double delta);
 
 	void internalLateUpdate();
-	void cameraRender(const Camera& camera) const;
+	void cameraRender(const Camera& camera, const glm::mat4& parentMatrix) const;
 protected:
 	NodeBase* mParent;
 	Scene* mScene;

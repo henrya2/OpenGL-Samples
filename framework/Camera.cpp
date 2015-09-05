@@ -102,12 +102,7 @@ void Camera::updateViewMatrix()
 
 void Camera::renderNodes(NodeBase* sceneNode)
 {
-	for (auto childNode : sceneNode->getAllChildren())
-	{
-		childNode->cameraRender(*this);
-	}
-
-	sceneNode->cameraRender(*this);
+	sceneNode->cameraRender(*this, glm::mat4(1.0f));
 }
 
 const glm::mat4& Camera::getVP() const

@@ -167,9 +167,9 @@ PrimitiveNode::~PrimitiveNode()
 	delete mGLSLProgram;
 }
 
-void PrimitiveNode::onRender(const Camera& camera) const
+void PrimitiveNode::onRender(const Camera& camera, const glm::mat4& worldMatrix) const
 {
-	glm::mat4 mvp = camera.getVP() * mTransform->getWorldMatrix();
+	glm::mat4 mvp = camera.getVP() * worldMatrix;
 
 	mGLSLProgram->use();
 

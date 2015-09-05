@@ -10,7 +10,7 @@ public:
 	PrimitiveNode(int width = 10, int depth = 10);
 	virtual ~PrimitiveNode();
 
-	virtual void onRender(const Camera& camera) const override;
+	virtual void onRender(const Camera& camera, const glm::mat4& worldMatrix) const override;
 
 private:
 	GLSLProgram* mGLSLProgram;

@@ -132,17 +132,23 @@ void NodeBase::internalLateUpdate()
 	onLateUpdate();
 }
 
-void NodeBase::cameraRender(const Camera& camera) const
+void NodeBase::cameraRender(const Camera& camera, const glm::mat4& parentMatrix) const
 {
-	for (auto component : mComponents)
+	glm::mat4 combineMatrix = parentMatrix * (getTransform()->getLocalMatrix());
+	for (auto child : mChildren)
 	{
-		component->onRender(camera);
+		child->cameraRender(camera, combineMatrix);
 	}
 
-	onRender(camera);
+	for (auto component : mComponents)
+	{
+		component->onRender(camera, combineMatrix);
+	}
+
+	onRender(camera, combineMatrix);
 }
 
-void NodeBase::onRender(const Camera& camera) const
+void NodeBase::onRender(const Camera& camera, const glm::mat4& worldMatrix) const
 {
 
 }
