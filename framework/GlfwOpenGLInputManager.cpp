@@ -212,19 +212,19 @@ std::tuple<double, double> GlfwOpenGLInputManager::getMousePosition() const
 	return std::make_tuple(posX, posY);
 }
 
-double GlfwOpenGLInputManager::getMouseDeltaX() const
+float GlfwOpenGLInputManager::getMouseDeltaX() const
 {
-	return _deltaXPos;
+	return (float)_deltaXPos;
 }
 
-double GlfwOpenGLInputManager::getMouseDeltaY() const
+float GlfwOpenGLInputManager::getMouseDeltaY() const
 {
-	return _deltaYPos;
+	return (float)_deltaYPos;
 }
 
-std::tuple<double, double> GlfwOpenGLInputManager::getMouseDelta() const
+std::tuple<float, float> GlfwOpenGLInputManager::getMouseDelta() const
 {
-	return std::make_tuple(_deltaXPos, _deltaYPos);
+	return std::make_tuple((float)_deltaXPos, (float)_deltaYPos);
 }
 
 bool GlfwOpenGLInputManager::isMouseButtonDown(MouseButtonCode buttonCode) const

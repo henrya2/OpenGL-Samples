@@ -9,17 +9,6 @@
 #include <iostream>
 #include "PrimitiveNode.h"
 
-GLSLProgram glslProgram;
-
-const float vertexPositions[] = {
-	0.75f, 0.75f, 0.0f,
-	0.75f, -0.75f, 0.0f,
-	-0.75f, -0.75f, 0.0f,
-};
-
-GLuint positionBufferObject;
-GLuint vao;
-
 CameraSample::CameraSample()
 {
 
@@ -32,10 +21,6 @@ CameraSample::~CameraSample()
 
 void CameraSample::onUpdate(double delta)
 {
-	static int testCount = 0;
-
-	testCount++;
-
 	IInputManager* inputManager = Director::getInstance()->getInputManager();
 
 	static auto oldMousePosition = inputManager->getMousePosition();
@@ -57,15 +42,6 @@ void CameraSample::onUpdate(double delta)
 void CameraSample::onRender()
 {
 	return;
-
-	glslProgram.use();
-
-	glBindVertexArray(vao);
-
-	glDrawArrays(GL_TRIANGLES, 0, 3);
-
-	glslProgram.unUse();
-	glBindVertexArray(0);
 }
 
 void CameraSample::onPreRender()
@@ -116,50 +92,7 @@ bool CameraSample::onBeforeRun()
 	PrimitiveNode* primitiveNode = new PrimitiveNode;
 	Director::getInstance()->getRunningScene()->addChild(primitiveNode);
 
-	//customInit();
-
 	return true;
-}
-
-void CameraSample::customInit()
-{
-	try
-	{
-		glslProgram.loadShader(GLSLShaderType::VERTEX, g_programName + "/" + "CameraSample.vert");
-		glslProgram.loadShader(GLSLShaderType::FRAGMENT, g_programName + "/" + "CameraSample.frag");
-	}
-	catch (GLSLProgramException& e)
-	{
-		printf("%s\n", e.what());
-		system("pause");
-		exit(EXIT_FAILURE);
-	}
-
-	glslProgram.link();
-
-	glGenBuffers(1, &positionBufferObject);
-
-	glBindBuffer(GL_ARRAY_BUFFER, positionBufferObject);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertexPositions), vertexPositions, GL_STATIC_DRAW);
-
-	glGenVertexArrays(1, &vao);
-	glBindVertexArray(vao);
-
-	GLint positionLoc = glslProgram.getAttributeLocation("position");
-	glEnableVertexAttribArray(positionLoc);
-	glVertexAttribPointer(positionLoc, 4, GL_FLOAT, GL_FALSE, 0, 0);
-
-	glBindVertexArray(0);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-	std::vector<glm::vec3> verts;
-	std::vector<glm::u16> indices;
-
-	glm::vec3 center(0, 0, 0);
-
-	Utils::genTriGrid(100, 100, 1.0f, 1.0f, center, verts, indices);
-
-	printf("\n");
 }
 
 /* Our program's entry point */

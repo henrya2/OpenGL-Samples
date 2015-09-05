@@ -21,11 +21,7 @@ public:
 
 	const glm::vec3& getRotation() const;
 
-	void updateTransformMatrix();
-
 	void updateViewMatrix();
-
-	const glm::mat4& getTransformMatrix() const;
 
 	const glm::mat4& getViewMatrix() const;
 

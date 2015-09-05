@@ -19,7 +19,6 @@ public:
 
 	virtual bool onBeforeRun();
 
-	void customInit();
 	void onViewSizeChanged(const glm::ivec2& viewSize);
 
 	void setupViewPort(const glm::ivec2& viewSize);

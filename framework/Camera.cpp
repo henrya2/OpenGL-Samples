@@ -11,10 +11,8 @@
 
 struct Camera::Impl
 {
-	glm::mat4 transformMat;
 	glm::vec3 position;
 	glm::vec3 rotation;
-
 
 	// projection
 	float fovy;
@@ -25,10 +23,18 @@ struct Camera::Impl
 	glm::mat4 projectionMat;
 
 	// view
-
 	glm::mat4 viewMat;
 
+	bool dirty;
+
 	int _transformChangedCallbackId;
+
+	Impl()
+		: dirty(false)
+		, _transformChangedCallbackId(0)
+	{
+
+	}
 };
 
 Camera::Camera()
@@ -39,9 +45,11 @@ Camera::Camera()
 
 void Camera::setPosition(const glm::vec3& pos)
 {
-	dImpl->position = pos;
-	
-	updateViewMatrix();
+	if (dImpl->position != pos)
+	{
+		dImpl->position = pos;
+		dImpl->dirty = true;
+	}
 }
 
 const glm::vec3& Camera::getPosition() const
@@ -51,19 +59,17 @@ const glm::vec3& Camera::getPosition() const
 
 void Camera::setRotation(const glm::vec3& rot)
 {
-	dImpl->rotation = rot;
+	if (dImpl->rotation != rot)
+	{
+		dImpl->rotation = rot;
+		dImpl->dirty = true;
+	}
 
-	updateViewMatrix();
 }
 
 const glm::vec3& Camera::getRotation() const
 {
 	return dImpl->rotation;
-}
-
-const glm::mat4& Camera::getTransformMatrix() const
-{
-	return dImpl->transformMat;
 }
 
 const glm::mat4& Camera::getProjectionMatrix() const
@@ -88,16 +94,10 @@ const glm::mat4& Camera::getViewMatrix() const
 
 void Camera::updateViewMatrix()
 {
-	updateTransformMatrix();
-
-	dImpl->viewMat = glm::inverse(dImpl->transformMat);
-}
-
-void Camera::updateTransformMatrix()
-{
 	glm::mat4 matrix = glm::mat4_cast(glm::quat(dImpl->rotation));
-	matrix[3] = glm::vec4(dImpl->position.xyz, 1.0f);
-	dImpl->transformMat = matrix;
+	matrix = glm::transpose(matrix);
+
+	dImpl->viewMat = glm::translate(matrix, -dImpl->position);
 }
 
 void Camera::renderNodes(NodeBase* sceneNode)
@@ -120,7 +120,11 @@ const glm::mat4& Camera::getVP() const
 
 void Camera::onLateUpdate()
 {
-
+	if (dImpl->dirty)
+	{
+		updateViewMatrix();
+		dImpl->dirty = false;
+	}
 }
 
 void Camera::onUpdate(double delta)
@@ -131,6 +135,8 @@ void Camera::onUpdate(double delta)
 void Camera::onAttached()
 {
 	dImpl->_transformChangedCallbackId = getSceneNode()->getTransform()->addChangedCallback(std::bind(&Camera::onTransformChanged, this, std::placeholders::_1));
+	
+	onTransformChanged(*getSceneNode()->getTransform());
 }
 
 void Camera::onDettached()

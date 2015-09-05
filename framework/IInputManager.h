@@ -21,9 +21,9 @@ public:
 	virtual double getMousePosX() const = 0;
 	virtual double getMousePosY() const = 0;
 	virtual std::tuple<double, double> getMousePosition() const = 0;
-	virtual double getMouseDeltaX() const = 0;
-	virtual double getMouseDeltaY() const = 0;
-	virtual std::tuple<double, double> getMouseDelta() const = 0;
+	virtual float getMouseDeltaX() const = 0;
+	virtual float getMouseDeltaY() const = 0;
+	virtual std::tuple<float, float> getMouseDelta() const = 0;
 
 	virtual bool isMouseButtonDown(MouseButtonCode buttonCode) const = 0;
 

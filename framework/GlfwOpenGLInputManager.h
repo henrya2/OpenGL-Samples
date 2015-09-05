@@ -21,9 +21,9 @@ public:
 	virtual double getMousePosY() const override;
 	virtual std::tuple<double, double> getMousePosition() const override;
 
-	virtual double getMouseDeltaX() const;
-	virtual double getMouseDeltaY() const;
-	virtual std::tuple<double, double> getMouseDelta() const;
+	virtual float getMouseDeltaX() const;
+	virtual float getMouseDeltaY() const;
+	virtual std::tuple<float, float> getMouseDelta() const;
 
 
 	virtual bool isMouseButtonDown(MouseButtonCode buttonCode) const override;
