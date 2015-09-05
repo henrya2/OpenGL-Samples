@@ -75,8 +75,8 @@ bool CameraSample::onBeforeRun()
 	{
 		window = Director::getInstance()->createDefaultWindow();
 		window->viewSizeChangedCallback = std::bind(&CameraSample::onViewSizeChanged, this, std::placeholders::_1);
-		window->createWindow("Hello", 640, 480);
 		window->setGLVersion(3, 3);
+		window->createWindow("Hello", 640, 480);
 		bool result = window->initGL();
 		if (!result)
 			return false;

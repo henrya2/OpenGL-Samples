@@ -214,6 +214,13 @@ void GlfwOpenGLWindow::createWindow(const std::string& title, int width, int hei
 {
 	glfwInit();
 
+	// Use core profile
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_FALSE);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, glMajorVersion);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, glMinorVersion);
+	//glfwWindowHint(GLFW_CONTEXT_REVISION, 0);
+
 	mGlfwWindow = glfwCreateWindow(width, height, title.c_str(), nullptr, nullptr);
 
 	RegisterGlfwWindows(this);

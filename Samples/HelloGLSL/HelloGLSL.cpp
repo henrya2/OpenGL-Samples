@@ -54,8 +54,8 @@ bool HelloGLSL::onBeforeRun()
 	if (!window)
 	{
 		window = Director::getInstance()->createDefaultWindow();
-		window->createWindow("Hello", 640, 480);
 		window->setGLVersion(3, 3);
+		window->createWindow("Hello", 640, 480);
 		bool result = window->initGL();
 		if (!result)
 			return false;
