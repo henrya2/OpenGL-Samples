@@ -68,7 +68,7 @@ NodeBase::NodeBase()
 	: mScene(nullptr)
 	, mParent(nullptr)
 {
-	mTransform = new Transform();
+	mTransform = new Transform(this);
 
 	_alreadyPassFirstUpdate = false;
 }
@@ -116,6 +116,9 @@ void NodeBase::internalUpdate(double delta)
 
 void NodeBase::internalLateUpdate()
 {
+	mTransform->updateMatrix();
+	mTransform->clearDirty();
+
 	for (auto component : mComponents)
 	{
 		component->onLateUpdate();
@@ -127,8 +130,6 @@ void NodeBase::internalLateUpdate()
 	}
 
 	onLateUpdate();
-
-	mTransform->clearDirty();
 }
 
 void NodeBase::cameraRender(const Camera& camera) const

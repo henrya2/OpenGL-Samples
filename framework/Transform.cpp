@@ -1,24 +1,41 @@
 #include "Transform.h"
+#include "NodeBase.h"
 #include "glm/glm.hpp"
 #include "glm/gtc/quaternion.hpp"
+#include "glm/gtc/matrix_transform.hpp"
 
 struct Transform::Impl
 {
-	glm::vec3 localPosition;
 	glm::vec3 position;
 	glm::vec3 scale;
-	glm::vec3 localScale;
-	glm::vec3 localRotation;
 	glm::vec3 rotation;
 
 	glm::mat4 localMatrix;
+
 	glm::mat4 matrix;
+
+	Impl()
+		: dirty(false)
+		, localMatrix(1.0f)
+		, matrix(1.0f)
+	{
+
+	}
 
 	bool dirty;
 };
 
 const glm::mat4& Transform::getWorldMatrix() const
 {
+	dImpl->matrix = dImpl->localMatrix;
+
+	NodeBase* nodeParent = mNode->getParent();
+
+	if (nodeParent)
+	{
+		dImpl->matrix = nodeParent->getTransform()->getWorldMatrix() * dImpl->matrix;
+	}
+
 	return dImpl->matrix;
 }
 
@@ -27,8 +44,9 @@ const glm::mat4& Transform::getLocalMatrix() const
 	return dImpl->localMatrix;
 }
 
-Transform::Transform()
+Transform::Transform(NodeBase* node)
 	: _nextCallbackId(1)
+	, mNode(node)
 {
 	dImpl = new Impl();
 }
@@ -82,6 +100,25 @@ void Transform::notifyChanged() const
 	for (auto& callbackPair : mCallbackmaps)
 	{
 		callbackPair.second(*this);
+	}
+}
+
+void Transform::updateMatrix()
+{
+	if (dImpl->dirty)
+	{
+		glm::mat4 matrix = glm::translate(glm::mat4(1.0f), dImpl->position);
+
+		if (dImpl->rotation != glm::zero<glm::vec3>())
+		{
+			matrix *= glm::mat4_cast(glm::quat(dImpl->rotation));
+		}
+		if (dImpl->scale != glm::zero<glm::vec3>())
+		{
+			matrix = glm::scale(matrix, dImpl->scale);
+		}
+
+		dImpl->localMatrix = matrix;
 	}
 }
 

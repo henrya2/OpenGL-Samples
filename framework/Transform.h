@@ -5,12 +5,14 @@
 #include <functional>
 #include <map>
 
+class NodeBase;
+
 class Transform
 {
 public:
 	typedef std::function<void(const Transform& transform)> TransformChangedCallback;
 public:
-	Transform();
+	Transform(NodeBase* node);
 	virtual ~Transform();
 
 	const glm::vec3& getPosition() const;
@@ -24,6 +26,8 @@ public:
 
 	const glm::mat4& getWorldMatrix() const;
 	const glm::mat4& getLocalMatrix() const;
+
+	void updateMatrix();
 
 	bool isDirty() const;
 
@@ -41,4 +45,6 @@ private:
 
 	int _nextCallbackId;
 	std::map<int, TransformChangedCallback> mCallbackmaps;
+
+	NodeBase* mNode;
 };

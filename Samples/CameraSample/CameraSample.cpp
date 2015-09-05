@@ -94,6 +94,12 @@ bool CameraSample::onBeforeRun()
 	PrimitiveNode* primitiveNode = new PrimitiveNode;
 	Director::getInstance()->getRunningScene()->addChild(primitiveNode);
 
+	primitiveNode = new PrimitiveNode;
+	Director::getInstance()->getRunningScene()->addChild(primitiveNode);
+	primitiveNode->getTransform()->setRotation(glm::vec3(0.0f, glm::quarter_pi<float>(), 0.0f));
+	primitiveNode->getTransform()->setScale(glm::vec3(0.75f, 0.75f, 0.75f));
+	primitiveNode->getTransform()->setPosition(glm::vec3(-5.0f, 0.0f, 0.0f));
+
 	return true;
 }
 

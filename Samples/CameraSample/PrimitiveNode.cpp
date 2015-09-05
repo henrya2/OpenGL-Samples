@@ -177,13 +177,6 @@ void PrimitiveNode::onRender(const Camera& camera) const
 
 	glBindVertexArray(vao);
 
-	//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-	glDrawArrays(GL_TRIANGLES, 0, 12 * 3);
-
-	glm::mat4 leftTranslateMat = glm::translate(glm::mat4(1.0f), glm::vec3(-5.0f, 0.0f, 0.0f));
-	mvp = camera.getVP() * leftTranslateMat;
-
-	mGLSLProgram->setUniform("MVP", mvp);
 	glDrawArrays(GL_TRIANGLES, 0, 12 * 3);
 
 	glBindVertexArray(0);
