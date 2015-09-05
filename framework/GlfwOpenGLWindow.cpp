@@ -271,6 +271,9 @@ bool GlfwOpenGLWindow::initGL()
 
 	glViewport(0, 0, width, height);
 
+	glFrontFace(GL_CCW);
+	glCullFace(GL_BACK);
+
 	return true;
 }
 

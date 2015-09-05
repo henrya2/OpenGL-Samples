@@ -53,11 +53,11 @@ void CameraNode::onUpdate(double delta)
 
 	if (glm::abs(inputManager->getMouseDeltaX()) > glm::epsilon<float>())
 	{
-		rotationEuler.y += inputManager->getMouseDeltaX() * fDelta / 180 * glm::pi<float>() * MOVE_SPEED;
+		rotationEuler.y -= inputManager->getMouseDeltaX() * fDelta / 180 * glm::pi<float>() * MOVE_SPEED;
 	}
 	if (glm::abs(inputManager->getMouseDeltaY()) > glm::epsilon<float>())
 	{
-		rotationEuler.x += inputManager->getMouseDeltaY() * fDelta / 180 * glm::pi<float>() * MOVE_SPEED;
+		rotationEuler.x -= inputManager->getMouseDeltaY() * fDelta / 180 * glm::pi<float>() * MOVE_SPEED;
 	}
 
 	if (moveOffset != glm::zero<glm::vec3>())
@@ -76,7 +76,7 @@ void CameraNode::start()
 	Transform* transform = getTransform();
 	if (transform)
 	{
-		transform->setPosition(glm::vec3(0, 0, 2.f));
+		transform->setPosition(glm::vec3(0, 0, 7.f));
 	}
 }
 

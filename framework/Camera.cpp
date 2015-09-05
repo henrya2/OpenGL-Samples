@@ -96,7 +96,8 @@ void Camera::updateViewMatrix()
 void Camera::updateTransformMatrix()
 {
 	glm::mat4 matrix = glm::mat4_cast(glm::quat(dImpl->rotation));
-	dImpl->transformMat = glm::translate(matrix, dImpl->position);
+	matrix[3] = glm::vec4(dImpl->position.xyz, 1.0f);
+	dImpl->transformMat = matrix;
 }
 
 void Camera::renderNodes(NodeBase* sceneNode)
