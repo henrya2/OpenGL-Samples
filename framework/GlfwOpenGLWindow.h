@@ -25,7 +25,11 @@ public:
 
 	virtual void pollEvents();
 
+	virtual void endDrawing();
+
 	virtual void swapBuffers();
+
+	virtual void resizeOpenGLViewport(int width, int height);
 
 	virtual bool initGL();
 
@@ -46,6 +50,10 @@ private:
 
 	int glMajorVersion;
 	int glMinorVersion;
+
+	int mWidth;
+
+	int MHeight;
 
 	bool mVSync;
 };

@@ -20,7 +20,9 @@ public:
 	virtual glm::ivec2 getViewSize() const = 0;
 	virtual bool windowShouldClose() const = 0;
 	virtual void pollEvents() = 0;
+	virtual void endDrawing() = 0;
 	virtual void swapBuffers() = 0;
+	virtual void resizeOpenGLViewport(int width, int height) = 0;
 	virtual void setGLVersion(int major, int minor) = 0;
 	virtual bool initGL() = 0;
 	virtual void destroy() = 0;

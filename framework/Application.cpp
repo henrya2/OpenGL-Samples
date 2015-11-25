@@ -65,6 +65,8 @@ void Application::run()
 
 		director->mainLoop((float)frameDuration);
 
+		window->endDrawing();
+
 		window->swapBuffers();
 
 		frameEndTime = glfwGetTime();

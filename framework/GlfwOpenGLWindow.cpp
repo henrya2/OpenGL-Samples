@@ -276,7 +276,7 @@ bool GlfwOpenGLWindow::initGL()
 	int width, height;
 	glfwGetFramebufferSize(mGlfwWindow, &width, &height);
 
-	glViewport(0, 0, width, height);
+	resizeOpenGLViewport(width, height);
 
 	glEnable(GL_CULL_FACE);
 	glFrontFace(GL_CCW);
@@ -307,9 +307,21 @@ void GlfwOpenGLWindow::pollEvents()
 	glfwPollEvents();
 }
 
+void GlfwOpenGLWindow::endDrawing()
+{
+
+}
+
 void GlfwOpenGLWindow::swapBuffers()
 {
 	glfwSwapBuffers(mGlfwWindow);
+}
+
+void GlfwOpenGLWindow::resizeOpenGLViewport(int width, int height)
+{
+	glViewport(0, 0, width, height);
+	mWidth = width;
+	MHeight = height;
 }
 
 glm::ivec2 GlfwOpenGLWindow::getViewSize() const
@@ -324,6 +336,8 @@ void GlfwOpenGLWindow::notifyViewSizeChanged(int width, int height)
 {
 	if (viewSizeChangedCallback)
 		viewSizeChangedCallback(glm::ivec2(width, height));
+
+	resizeOpenGLViewport(width, height);
 }
 
 void GlfwOpenGLWindow::setVSync(bool vsync)
