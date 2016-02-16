@@ -7,7 +7,6 @@ if(MSVC)
 	set(BINARY_DIRECTORY build)
 endif()
 
-
 ################################
 # Add GLFW
 set(GLFW_DIRECTORY glfw-3.0.3)
@@ -34,6 +33,16 @@ add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/${GLEW_DIRECTORY})
 list(APPEND GL_APP_DEPS ${GLEW_LIB_NAME})
 
 ##########################################
+# Add SOIL
+
+set(SOIL_DIRECTORY SOIL)
+set(SOIL_LIB_NAME SOIL_Static)
+
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/${SOIL_DIRECTORY})
+
+list(APPEND GL_APP_DEPS ${SOIL_LIB_NAME})
+
+##########################################
 # Add GLM
 set(GLM_DIRECTORY glm)
 
@@ -41,6 +50,7 @@ set(GLM_DIRECTORY glm)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/${GLM_DIRECTORY})
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/${GLFW_DIRECTORY}/include)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/${GLEW_DIRECTORY}/include)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/${SOIL_DIRECTORY}/include)
 
 ################################
 # Add freeimage
