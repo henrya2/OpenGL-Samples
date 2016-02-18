@@ -9,13 +9,15 @@ public:
 	Playground();
 	~Playground();
 
-	virtual void onRender();
+	virtual void onRender() override;
 
-	virtual void onPreRender();
+	virtual void onPreRender() override;
 
-	virtual void onPostRender();
+	virtual void onPostRender() override;
 
-	virtual bool onBeforeRun();
+	virtual bool onBeforeRun() override;
+
+	virtual void onShutdown() override;
 
 	void customInit();
 

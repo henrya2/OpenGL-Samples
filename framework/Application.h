@@ -14,11 +14,13 @@ public:
 
 	virtual bool onBeforeRun() { return true; };
 
+	virtual void onShutdown() {}
+
 	void run();
 
 	virtual void onUpdate(float delta);
 
-	void setMaxFrame();
+	void setMaxFrame(int maxFrame);
 
 private:
 	int mMaxFrame;

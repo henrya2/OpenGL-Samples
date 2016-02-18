@@ -91,3 +91,8 @@ void Application::onUpdate(float delta)
 {
 
 }
+
+void Application::setMaxFrame(int maxFrame)
+{
+	mMaxFrame = maxFrame;
+}
