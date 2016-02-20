@@ -9,4 +9,5 @@ uniform sampler2D textureMap;
 void main()
 {
 	vFragColor = texture(textureMap, vUV);
+	//vFragColor = vec4(vUV, 0, 1.0);
 }

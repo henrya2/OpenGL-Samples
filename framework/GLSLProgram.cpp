@@ -64,7 +64,7 @@ void GLSLProgram::loadShader(GLSLShaderType type, const std::string& fileName)
 
 	// Get file contents
 	inFile.seekg(0, std::ios::end);
-	size_t fileSize = inFile.tellg();
+	size_t fileSize = (size_t)inFile.tellg();
 	inFile.seekg(0);
 
 	std::string strSourceCode;

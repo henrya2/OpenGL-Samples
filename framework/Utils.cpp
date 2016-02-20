@@ -1,5 +1,8 @@
 #include "Utils.h"
 
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
+
 namespace Utils
 {
 	void genTriGrid(int numVertRows, int numVertCols, float dx, float dz, const glm::vec3& center, std::vector<glm::vec3>& verts, std::vector<glm::u16>& indices)

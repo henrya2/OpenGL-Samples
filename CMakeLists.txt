@@ -1,5 +1,4 @@
 cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
-cmake_policy(VERSION 2.8)
 
 project(OpenGLSamples)
 
@@ -33,57 +32,18 @@ add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/${GLEW_DIRECTORY})
 list(APPEND GL_APP_DEPS ${GLEW_LIB_NAME})
 
 ##########################################
-# Add SOIL
-
-set(SOIL_DIRECTORY SOIL)
-set(SOIL_LIB_NAME SOIL_Static)
-
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/${SOIL_DIRECTORY})
-
-list(APPEND GL_APP_DEPS ${SOIL_LIB_NAME})
-
-##########################################
 # Add GLM
 set(GLM_DIRECTORY glm)
 
+##########################################
+# Add stb
+set(STB_DIRECTORY stb)
+
 # Add the include_directories last, to avoid the headers files to polutes other libraries
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/${GLM_DIRECTORY})
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/${STB_DIRECTORY})
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/${GLFW_DIRECTORY}/include)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/${GLEW_DIRECTORY}/include)
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/${SOIL_DIRECTORY}/include)
-
-################################
-# Add freeimage
-
-if(MSVC AND NOT CMAKE_CL_64)
-	set(FREEIMAGE_BINARY_DIRECTORY "win32")
-endif()
-if(MSVC AND CMAKE_CL_64)
-	set(FREEIMAGE_BINARY_DIRECTORY "win64")
-endif()
-if(APPLE)
-	set(FREEIMAGE_BINARY_DIRECTORY "macosx")
-endif()
-if(UNIX AND NOT APPLE AND CMAKE_CL_64)
-	set(FREEIMAGE_BINARY_DIRECTORY "linux64")
-endif()
-if(UNIX AND NOT APPLE AND NOT CMAKE_CL_64)
-	set(FREEIMAGE_BINARY_DIRECTORY "linux64")
-endif()
-
-set(FREEIMAGE_DIRECTORY FreeImage-3.15.4)
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/${FREEIMAGE_DIRECTORY})
-
-if(MSVC)
-	set(FREEIMAGE_LIBRARY FreeImage.lib)
-	set(FREEIMAGE_BINARY_FILE FreeImage.dll)
-else()
-	add_definitions(-DFREEIMAGE_LIB)
-	set(FREEIMAGE_LIBRARY freeimage)
-	set(FREEIMAGE_BINARY_FILE freeimage)
-endif()
-list(APPEND GL_APP_LIBS ${FREEIMAGE_LIBRARY})
-set(FREEIMAGE_BIN_PATH ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/${FREEIMAGE_DIRECTORY}/${FREEIMAGE_BINARY_DIRECTORY}/${FREEIMAGE_BINARY_FILE})
 
 if(WIN32)
 	list(APPEND GL_APP_LIBS Winmm.lib)

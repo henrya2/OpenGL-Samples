@@ -3,7 +3,8 @@
 
 #include "Utils.h"
 
-#include "FreeImage.h"
+#include "stb_image.h"
+
 #include <iostream>
 
 const std::string g_programName = "Playground";
@@ -87,14 +88,10 @@ void Playground::onShutdown()
 
 	//Delete textures
 	glDeleteTextures(1, &textureID);
-
-	FreeImage_DeInitialise();
 }
 
 void Playground::customInit()
 {
-	FreeImage_Initialise();
-
 	filename = g_programName + "/" + "Lenna.png";
 
 	try
@@ -150,28 +147,14 @@ void Playground::customInit()
 	//load the image using FreeImage
 	int texture_width = 0, texture_height = 0, channels = 0;
 
-	//image format
-	FREE_IMAGE_FORMAT fif = FIF_UNKNOWN;
-	//pointer to the image, once loaded
-	FIBITMAP *dib(0);
-	//pointer to the image data
-	BYTE* bits(0);
-	//image width and height
-	unsigned int width(0), height(0);
+	// Need to flip vertically, because OpenGL require the first pixel start from lowest left corner.
+	stbi_set_flip_vertically_on_load(1);
 
-	fif = FreeImage_GetFileType(filename.c_str(), 0);
-
-	dib = FreeImage_Load(fif, filename.c_str());
-
-	if (!dib)
+	unsigned char* bits = stbi_load(filename.c_str(), &texture_width, &texture_height, &channels, 0);
+	if (!bits)
 	{
-		std::cerr << "Cannot load image: " << filename.c_str() << std::endl;
 		exit(EXIT_FAILURE);
 	}
-
-	bits = FreeImage_GetBits(dib);
-	texture_width = FreeImage_GetWidth(dib);
-	texture_height = FreeImage_GetHeight(dib);
 
 	glGenTextures(1, &textureID);
 	glActiveTexture(GL_TEXTURE0 + 0);
@@ -182,11 +165,11 @@ void Playground::customInit()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
 
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, texture_width, texture_height, 0, GL_BGR, GL_UNSIGNED_BYTE, bits);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, texture_width, texture_height, 0, GL_RGB, GL_UNSIGNED_BYTE, bits);
 
 	glslProgram.setUniform("textureMap", 0); // GL_TEXTURE0
 
-	FreeImage_Unload(dib);
+	stbi_image_free(bits);
 }
 
 /* Our program's entry point */
