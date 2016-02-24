@@ -16,7 +16,6 @@ enum Attrib_IDS { vPosition = 0 };
 GLuint vaoID;
 GLuint vboVerticesID;
 GLuint vboIndicesID;
-GLuint textureID;
 
 std::string filename;
 
@@ -84,8 +83,6 @@ void Playground::onShutdown()
 	glDeleteBuffers(1, &vboIndicesID);
 	glDeleteVertexArrays(1, &vaoID);
 
-	//Delete textures
-	glDeleteTextures(1, &textureID);
 	if (mTexture)
 	{
 		delete mTexture;
