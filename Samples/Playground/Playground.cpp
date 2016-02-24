@@ -3,8 +3,6 @@
 
 #include "Utils.h"
 
-#include "stb_image.h"
-
 #include <iostream>
 
 const std::string g_programName = "Playground";
@@ -26,7 +24,7 @@ const GLuint NumVertices = 6;
 
 Playground::Playground()
 {
-
+	mTexture = nullptr;
 }
 
 Playground::~Playground()
@@ -88,6 +86,10 @@ void Playground::onShutdown()
 
 	//Delete textures
 	glDeleteTextures(1, &textureID);
+	if (mTexture)
+	{
+		delete mTexture;
+	}
 }
 
 void Playground::customInit()
@@ -144,32 +146,10 @@ void Playground::customInit()
 	glBindVertexArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-	//load the image using FreeImage
-	int texture_width = 0, texture_height = 0, channels = 0;
-
-	// Need to flip vertically, because OpenGL require the first pixel start from lowest left corner.
-	stbi_set_flip_vertically_on_load(1);
-
-	unsigned char* bits = stbi_load(filename.c_str(), &texture_width, &texture_height, &channels, 0);
-	if (!bits)
-	{
-		exit(EXIT_FAILURE);
-	}
-
-	glGenTextures(1, &textureID);
-	glActiveTexture(GL_TEXTURE0 + 0);
-	glBindTexture(GL_TEXTURE_2D, textureID);
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, texture_width, texture_height, 0, GL_RGB, GL_UNSIGNED_BYTE, bits);
+	mTexture = new Texture(filename);
+	mTexture->load(0);
 
 	glslProgram.setUniform("textureMap", 0); // GL_TEXTURE0
-
-	stbi_image_free(bits);
 }
 
 /* Our program's entry point */
