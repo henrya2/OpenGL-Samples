@@ -13,7 +13,7 @@ public:
 
 	~Texture();
 
-	bool load(unsigned int samplerTextureIndex);
+	bool load();
 
 	int getWidth() const { return mImageSize.x; }
 
@@ -25,8 +25,12 @@ public:
 
 	unsigned int getSamplerTextureIndex() const { return mSamplerTextureIndex; }
 
+	void activateTexture(unsigned int samplerTextureIndex);
+
 protected:
 	std::string mFileName;
+
+	bool mLoaded;
 
 	glm::ivec2 mImageSize;
 

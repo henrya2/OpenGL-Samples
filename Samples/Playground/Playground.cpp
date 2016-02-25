@@ -144,7 +144,8 @@ void Playground::customInit()
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 	mTexture = new Texture(filename);
-	mTexture->load(0);
+	mTexture->load();
+	mTexture->activateTexture(0); // GL_TEXTURE0
 
 	glslProgram.setUniform("textureMap", 0); // GL_TEXTURE0
 }
