@@ -12,7 +12,7 @@ GLSLProgram::GLSLProgram()
 
 GLSLProgram::~GLSLProgram()
 {
-
+	deleteProgram();
 }
 
 void GLSLProgram::compileShader(GLSLShaderType type, const std::string& source)
@@ -186,7 +186,11 @@ void GLSLProgram::setUniform(const char* name, bool val)
 
 void GLSLProgram::deleteProgram()
 {
-	glDeleteProgram(mProgramId);
+	if (mProgramId)
+	{
+		glDeleteProgram(mProgramId);
+	}
+
 	mLinked = false;
 
 	mUniformLocations.clear();
