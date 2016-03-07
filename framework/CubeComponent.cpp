@@ -18,7 +18,6 @@ CubeComponent::CubeComponent()
 CubeComponent::~CubeComponent()
 {
 	freeResources();
-
 }
 
 void CubeComponent::onRender(const Camera& camera, const glm::mat4& worldMatrix)
