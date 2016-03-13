@@ -15,6 +15,8 @@ public:
 
 	bool load();
 
+	bool isLoaded() { return mLoaded; }
+
 	int getWidth() const { return mImageSize.x; }
 
 	int getHeight() const { return mImageSize.y; }

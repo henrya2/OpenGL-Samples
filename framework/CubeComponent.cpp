@@ -2,22 +2,37 @@
 #include "VertexStructs.h"
 #include "Camera.h"
 #include "GLSLProgram.h"
+#include "Texture.h"
 
 #include <vector>
 
 CubeComponent::CubeComponent()
 {
-	vertexBufferId = 0;
-	indexBufferId = 0;
+	mVertexBufferId = 0;
+	mIndexBufferId = 0;
 
 	mWidth = 100;
 	mHeight = 100;
 	mDepth = 100;
+
+	mTexture = nullptr;
 }
 
 CubeComponent::~CubeComponent()
 {
 	freeResources();
+}
+
+void CubeComponent::setSize(float width, float height, float depth, bool needUpdateResources /*= true*/)
+{
+	mWidth = width;
+	mHeight = height;
+	mDepth = depth;
+
+	if (needUpdateResources)
+	{
+		updateRenderResources();
+	}
 }
 
 void CubeComponent::onRender(const Camera& camera, const glm::mat4& worldMatrix)
@@ -53,10 +68,17 @@ void CubeComponent::onRender(const Camera& camera, const glm::mat4& worldMatrix)
 			glEnableVertexAttribArray(attribLoc);
 			glVertexAttribPointer(attribLoc, sizeof(VertexPositionColorNormalUV::uv), GL_FLOAT, GL_FALSE, VERTEX_ATTRIB_OFFSET(VertexPositionColorNormalUV, uv), nullptr);
 		}
+
+
+		if (mTexture && mTexture->isLoaded())
+		{
+			mTexture->activateTexture(0);
+			mGLSLProgram->setUniform("textureSampler", 0);
+		}
 	}
 
-	glBindBuffer(GL_ARRAY_BUFFER, vertexBufferId);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBufferId);
+	glBindBuffer(GL_ARRAY_BUFFER, mVertexBufferId);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mIndexBufferId);
 
 	glDrawElements(GL_TRIANGLES, 6 * 6, GL_UNSIGNED_INT, nullptr);
 }
@@ -65,8 +87,8 @@ void CubeComponent::updateRenderResources()
 {
 	freeResources();
 
-	glGenBuffers(1, &vertexBufferId);
-	glBindBuffer(GL_ARRAY_BUFFER, vertexBufferId);
+	glGenBuffers(1, &mVertexBufferId);
+	glBindBuffer(GL_ARRAY_BUFFER, mVertexBufferId);
 
 	glBufferData(GL_ARRAY_BUFFER, 24 * sizeof(VertexPositionColorNormalUV), nullptr, GL_STATIC_DRAW);
 
@@ -260,8 +282,8 @@ void CubeComponent::updateRenderResources()
 
 	glUnmapBuffer(GL_ARRAY_BUFFER);
 
-	glGenBuffers(1, &indexBufferId);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBufferId);
+	glGenBuffers(1, &mIndexBufferId);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mIndexBufferId);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6 * 6 * sizeof(unsigned int), nullptr, GL_STATIC_DRAW);
 	data = glMapBuffer(GL_ELEMENT_ARRAY_BUFFER, GL_WRITE_ONLY);
 	unsigned int* indexBufferData = (unsigned int*)data;
@@ -280,14 +302,19 @@ void CubeComponent::updateRenderResources()
 	glUnmapBuffer(GL_ELEMENT_ARRAY_BUFFER);
 }
 
+void CubeComponent::setTexture(Texture* texture)
+{
+	mTexture = texture;
+}
+
 void CubeComponent::freeResources()
 {
-	if (vertexBufferId)
+	if (mVertexBufferId)
 	{
-		glDeleteBuffers(1, &vertexBufferId);
+		glDeleteBuffers(1, &mVertexBufferId);
 	}
-	if (indexBufferId)
+	if (mIndexBufferId)
 	{
-		glDeleteBuffers(1, &indexBufferId);
+		glDeleteBuffers(1, &mIndexBufferId);
 	}
 }
