@@ -74,7 +74,7 @@ function(createSample NAME)
 	target_link_libraries(${SAMPLE_NAME} ${GL_APP_LIBS} ${GL_APP_DEPS})
 	add_dependencies(${SAMPLE_NAME} ${GL_APP_DEPS})
 
-	set_property(TARGET ${SAMPLE_NAME} PROPERTY COMPILE_DEFINITIONS GLEW_STATIC GLM_SWIZZLE GLM_FORCE_RADIANS)
+	set_property(TARGET ${SAMPLE_NAME} PROPERTY COMPILE_DEFINITIONS GLEW_STATIC GLM_SWIZZLE GLM_FORCE_RADIANS "SAMPLE_NAME=\"${SAMPLE_NAME}\"")
 endfunction(createSample)
 
 include("SamplesLists.txt")
