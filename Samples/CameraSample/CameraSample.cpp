@@ -8,6 +8,7 @@
 
 #include <iostream>
 #include "PrimitiveNode.h"
+#include "CubeComponent.h"
 
 CameraSample::CameraSample()
 	: mParentNode(nullptr)
@@ -118,14 +119,21 @@ bool CameraSample::onBeforeRun()
 
 	mSubNode = subNode;
 
+	auto cubeNode = new NodeBase;
+	cubeNode->addComponent<CubeComponent>();
+	primitiveNode->addChild(cubeNode);
+	cubeNode->getTransform()->setPosition(glm::vec3(5.0f, 0.0f, 0.0f));
+	mCubeNode = cubeNode;
+
 	return true;
 }
 
 /* Our program's entry point */
 int main(int argc, char *argv[])
 {
-	CameraSample app;
+	printf("Sample name: %s\n", SAMPLE_NAME);
 
+	CameraSample app;
 	app.run();
 
 	return 0;

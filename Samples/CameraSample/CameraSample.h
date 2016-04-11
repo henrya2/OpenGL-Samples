@@ -26,6 +26,8 @@ public:
 protected:
 	NodeBase* mParentNode;
 	NodeBase* mSubNode;
+
+	NodeBase* mCubeNode;
 };
 
 const std::string g_programName = "CameraSample";
