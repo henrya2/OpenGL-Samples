@@ -76,6 +76,20 @@ NodeBase::NodeBase()
 NodeBase::~NodeBase()
 {
 	delete mTransform;
+
+	for (size_t i = 0; i < mComponents.size(); ++i)
+	{
+		delete mComponents[i];
+	}
+
+	mComponents.clear();
+
+	for (size_t i = 0; i < mChildren.size(); ++i)
+	{
+		delete mChildren[i];
+	}
+
+	mChildren.clear();
 }
 
 void NodeBase::addChild(NodeBase* node)
