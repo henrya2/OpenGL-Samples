@@ -6,8 +6,21 @@ PrimitiveComponent::PrimitiveComponent()
 
 }
 
+PrimitiveComponent::~PrimitiveComponent()
+{
+	if (mGLSLProgram)
+	{
+		delete mGLSLProgram;
+	}
+}
+
 void PrimitiveComponent::setGLSLProgram(GLSLProgram* glslProgram)
 {
+	if (mGLSLProgram)
+	{
+		delete mGLSLProgram;
+	}
+
 	mGLSLProgram = glslProgram;
 }
 

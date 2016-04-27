@@ -9,6 +9,8 @@ class PrimitiveComponent : public IComponent
 public:
 	PrimitiveComponent();
 
+	virtual ~PrimitiveComponent();
+
 	void setGLSLProgram(GLSLProgram* glslProgram);
 
 	GLSLProgram* getGLSLProgram() const { return mGLSLProgram; }

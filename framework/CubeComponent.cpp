@@ -16,6 +16,40 @@ CubeComponent::CubeComponent()
 	mDepth = 100;
 
 	mTexture = nullptr;
+
+	const std::string defaultVertexShaderStr =
+		"in vec3 vertexColor;"
+		"in vec3 position;"
+		
+		"out vec3 fragmentColor;"
+		
+		"uniform mat4 MVP;"
+		
+		"void main()"
+		"{"
+		"	gl_Position = MVP * vec4(position.xyz, 1);"
+		
+		"	fragmentColor = vertexColor;"
+		"}";
+
+	const std::string defaultFragmentShaderStr =
+		"layout(location = 0) out vec4 outputColor;	//fragment shader output"
+
+		"in vec3 fragmentColor;"
+
+		"void main()"
+		"{"
+		"//set the interpolated colour as the shader output"
+		"outputColor = vec4(fragmentColor, 1.0f);"
+		"}";
+
+	GLSLProgram* defaultGLSLProgram = new GLSLProgram();
+
+	defaultGLSLProgram->compileShader(GLSLShaderType::VERTEX, defaultVertexShaderStr);
+	defaultGLSLProgram->compileShader(GLSLShaderType::FRAGMENT, defaultFragmentShaderStr);
+	defaultGLSLProgram->link();
+
+	setGLSLProgram(defaultGLSLProgram);
 }
 
 CubeComponent::~CubeComponent()
