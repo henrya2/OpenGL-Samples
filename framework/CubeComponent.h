@@ -25,6 +25,8 @@ public:
 protected:
 	void freeResources();
 
+	virtual void onAttached() override;
+
 protected:
 	float mWidth;
 	float mHeight;

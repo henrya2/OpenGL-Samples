@@ -18,30 +18,32 @@ CubeComponent::CubeComponent()
 	mTexture = nullptr;
 
 	const std::string defaultVertexShaderStr =
-		"in vec3 vertexColor;"
-		"in vec3 position;"
+		"#version 330 core\n"
+		"in vec3 vertexColor;\n"
+		"in vec3 vertexPosition;\n"
 		
-		"out vec3 fragmentColor;"
+		"out vec3 fragmentColor;\n"
 		
-		"uniform mat4 MVP;"
+		"uniform mat4 MVP;\n"
 		
-		"void main()"
-		"{"
-		"	gl_Position = MVP * vec4(position.xyz, 1);"
+		"void main()\n"
+		"{\n"
+		"	gl_Position = MVP * vec4(vertexPosition.xyz, 1);\n"
 		
-		"	fragmentColor = vertexColor;"
-		"}";
+		"	fragmentColor = vertexColor;\n"
+		"}\n";
 
 	const std::string defaultFragmentShaderStr =
-		"layout(location = 0) out vec4 outputColor;	//fragment shader output"
+		"#version 330 core\n"
+		"out vec4 outputColor;	//fragment shader output\n"
 
-		"in vec3 fragmentColor;"
+		"in vec3 fragmentColor;\n"
 
-		"void main()"
-		"{"
-		"//set the interpolated colour as the shader output"
-		"outputColor = vec4(fragmentColor, 1.0f);"
-		"}";
+		"void main()\n"
+		"{\n"
+		"//set the interpolated colour as the shader output\n"
+		"outputColor = vec4(fragmentColor, 1.0f);\n"
+		"}\n";
 
 	GLSLProgram* defaultGLSLProgram = new GLSLProgram();
 
@@ -352,4 +354,9 @@ void CubeComponent::freeResources()
 	{
 		glDeleteBuffers(1, &mIndexBufferId);
 	}
+}
+
+void CubeComponent::onAttached()
+{
+	updateRenderResources();
 }
