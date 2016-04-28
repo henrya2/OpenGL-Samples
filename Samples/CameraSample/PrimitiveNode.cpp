@@ -126,9 +126,6 @@ PrimitiveNode::PrimitiveNode(int width /*= 10*/, int depth /*= 10*/)
 	vertices[6] = glm::vec3(0.75f, 0.75f, -0.75);
 	vertices[7] = glm::vec3(0.75f, 0.75f, -0.75);
 
-	glGenVertexArrays(1, &vao);
-	glBindVertexArray(vao);
-
 	glGenBuffers(1, &mVBOId);
 	glBindBuffer(GL_ARRAY_BUFFER, mVBOId);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_STATIC_DRAW);
@@ -153,8 +150,6 @@ PrimitiveNode::PrimitiveNode(int width /*= 10*/, int depth /*= 10*/)
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mIBOId);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
-	glBindVertexArray(0);
-
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
@@ -175,11 +170,10 @@ void PrimitiveNode::onRender(const Camera& camera, const glm::mat4& worldMatrix)
 
 	mGLSLProgram->setUniform("MVP", mvp);
 
-	glBindVertexArray(vao);
+	glBindBuffer(GL_ARRAY_BUFFER, mVBOId);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mIBOId);
 
 	glDrawArrays(GL_TRIANGLES, 0, 12 * 3);
-
-	glBindVertexArray(0);
 
 	mGLSLProgram->unUse();
 }

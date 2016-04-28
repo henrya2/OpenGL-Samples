@@ -101,6 +101,10 @@ bool CameraSample::onBeforeRun()
 		Director::getInstance()->getInputManager()->setRelativeMouseMode(true);
 	}
 
+	GLuint vao;
+	glGenVertexArrays(1, &vao);
+	glBindVertexArray(vao);
+
 	Director::getInstance()->runWithScene(new Scene());
 
 	CameraNode* cameraNode = new CameraNode;
