@@ -80,6 +80,9 @@ void CubeComponent::onRender(const Camera& camera, const glm::mat4& worldMatrix)
 		mGLSLProgram->use();
 		mGLSLProgram->setUniform("MVP", mvp);
 
+		glBindBuffer(GL_ARRAY_BUFFER, mVertexBufferId);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mIndexBufferId);
+
 		GLint attribLoc = mGLSLProgram->getAttributeLocation("vertexPosition");
 		if (attribLoc != GL_INVALID_INDEX)
 		{
@@ -111,10 +114,6 @@ void CubeComponent::onRender(const Camera& camera, const glm::mat4& worldMatrix)
 			mTexture->activateTexture(0);
 			mGLSLProgram->setUniform("textureSampler", 0);
 		}
-
-
-		glBindBuffer(GL_ARRAY_BUFFER, mVertexBufferId);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mIndexBufferId);
 
 		glDrawElements(GL_TRIANGLES, 6 * 6, GL_UNSIGNED_INT, nullptr);
 	}
