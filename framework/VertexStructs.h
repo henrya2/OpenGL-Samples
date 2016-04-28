@@ -13,10 +13,10 @@ struct VertexPositionColorNormalUV
 
 #if defined(_MSC_VER) && !defined(_CRT_USE_BUILTIN_OFFSETOF)
 #ifdef __cplusplus
-	#define VERTEX_ATTRIB_OFFSET(s,m) ((GLsizei)&reinterpret_cast<char const volatile&>((((s*)0)->m)))
+	#define VERTEX_ATTRIB_OFFSET(s,m) ((void*)&reinterpret_cast<char const volatile&>((((s*)0)->m)))
 #else
-	#define VERTEX_ATTRIB_OFFSET(s,m) ((GLsizei)&(((s*)0)->m))
+	#define VERTEX_ATTRIB_OFFSET(s,m) ((void*)&(((s*)0)->m))
 #endif
 #else
-	#define VERTEX_ATTRIB_OFFSET(s,m) (GLsizei)__builtin_offsetof(s,m)
+	#define VERTEX_ATTRIB_OFFSET(s,m) (void*)__builtin_offsetof(s,m)
 #endif

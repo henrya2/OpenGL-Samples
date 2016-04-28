@@ -88,7 +88,7 @@ void CubeComponent::onRender(const Camera& camera, const glm::mat4& worldMatrix)
 		if (attribLoc != GL_INVALID_INDEX)
 		{
 			glEnableVertexAttribArray(attribLoc);
-			GLsizei offset = VERTEX_ATTRIB_OFFSET(VertexPositionColorNormalUV, position);
+			void* offset = VERTEX_ATTRIB_OFFSET(VertexPositionColorNormalUV, position);
 			GLint elementSize = sizeof(VertexPositionColorNormalUV::position) / sizeof(float);
 			glVertexAttribPointer(attribLoc, elementSize, GL_FLOAT, GL_FALSE, stride, (void*)offset);
 		}
@@ -96,7 +96,7 @@ void CubeComponent::onRender(const Camera& camera, const glm::mat4& worldMatrix)
 		if (attribLoc != GL_INVALID_INDEX)
 		{
 			glEnableVertexAttribArray(attribLoc);
-			GLsizei offset = VERTEX_ATTRIB_OFFSET(VertexPositionColorNormalUV, color);
+			void* offset = VERTEX_ATTRIB_OFFSET(VertexPositionColorNormalUV, color);
 			GLint elementSize = sizeof(VertexPositionColorNormalUV::color) / sizeof(float);
 			glVertexAttribPointer(attribLoc, elementSize, GL_FLOAT, GL_FALSE, stride, (void*)offset);
 		}
@@ -104,7 +104,7 @@ void CubeComponent::onRender(const Camera& camera, const glm::mat4& worldMatrix)
 		if (attribLoc != GL_INVALID_INDEX)
 		{
 			glEnableVertexAttribArray(attribLoc);
-			GLsizei offset = VERTEX_ATTRIB_OFFSET(VertexPositionColorNormalUV, normal);
+			void* offset = VERTEX_ATTRIB_OFFSET(VertexPositionColorNormalUV, normal);
 			GLint elementSize = sizeof(VertexPositionColorNormalUV::normal) / sizeof(float);
 			glVertexAttribPointer(attribLoc, elementSize, GL_FLOAT, GL_FALSE, stride, (void*)offset);
 		}
@@ -112,7 +112,7 @@ void CubeComponent::onRender(const Camera& camera, const glm::mat4& worldMatrix)
 		if (attribLoc != GL_INVALID_INDEX)
 		{
 			glEnableVertexAttribArray(attribLoc);
-			GLsizei offset = VERTEX_ATTRIB_OFFSET(VertexPositionColorNormalUV, uv);
+			void* offset = VERTEX_ATTRIB_OFFSET(VertexPositionColorNormalUV, uv);
 			GLint elementSize = sizeof(VertexPositionColorNormalUV::uv) / sizeof(float);
 			glVertexAttribPointer(attribLoc, elementSize, GL_FLOAT, GL_FALSE, stride, (void*)offset);
 		}
