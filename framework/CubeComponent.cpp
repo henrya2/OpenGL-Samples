@@ -11,9 +11,9 @@ CubeComponent::CubeComponent()
 	mVertexBufferId = 0;
 	mIndexBufferId = 0;
 
-	mWidth = 100;
-	mHeight = 100;
-	mDepth = 100;
+	mWidth = 4;
+	mHeight = 4;
+	mDepth = 4;
 
 	mTexture = nullptr;
 
@@ -42,7 +42,7 @@ CubeComponent::CubeComponent()
 		"void main()\n"
 		"{\n"
 		"//set the interpolated colour as the shader output\n"
-		"outputColor = vec4(fragmentColor.xyz, 1.0f);\n"
+		"outputColor = vec4(fragmentColor.rgb, 1.0f);\n"
 		"}\n";
 
 	GLSLProgram* defaultGLSLProgram = new GLSLProgram();
@@ -84,28 +84,37 @@ void CubeComponent::onRender(const Camera& camera, const glm::mat4& worldMatrix)
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mIndexBufferId);
 
 		GLint attribLoc = mGLSLProgram->getAttributeLocation("vertexPosition");
+		GLsizei stride = sizeof(VertexPositionColorNormalUV);
 		if (attribLoc != GL_INVALID_INDEX)
 		{
 			glEnableVertexAttribArray(attribLoc);
-			glVertexAttribPointer(attribLoc, sizeof(VertexPositionColorNormalUV::position), GL_FLOAT, GL_FALSE, VERTEX_ATTRIB_OFFSET(VertexPositionColorNormalUV, position), nullptr);
+			GLsizei offset = VERTEX_ATTRIB_OFFSET(VertexPositionColorNormalUV, position);
+			GLint elementSize = sizeof(VertexPositionColorNormalUV::position) / sizeof(float);
+			glVertexAttribPointer(attribLoc, elementSize, GL_FLOAT, GL_FALSE, stride, (void*)offset);
 		}
 		attribLoc = mGLSLProgram->getAttributeLocation("vertexColor");
 		if (attribLoc != GL_INVALID_INDEX)
 		{
 			glEnableVertexAttribArray(attribLoc);
-			glVertexAttribPointer(attribLoc, sizeof(VertexPositionColorNormalUV::color), GL_FLOAT, GL_FALSE, VERTEX_ATTRIB_OFFSET(VertexPositionColorNormalUV, color), nullptr);
+			GLsizei offset = VERTEX_ATTRIB_OFFSET(VertexPositionColorNormalUV, color);
+			GLint elementSize = sizeof(VertexPositionColorNormalUV::color) / sizeof(float);
+			glVertexAttribPointer(attribLoc, elementSize, GL_FLOAT, GL_FALSE, stride, (void*)offset);
 		}
 		attribLoc = mGLSLProgram->getAttributeLocation("vertexNormal");
 		if (attribLoc != GL_INVALID_INDEX)
 		{
 			glEnableVertexAttribArray(attribLoc);
-			glVertexAttribPointer(attribLoc, sizeof(VertexPositionColorNormalUV::normal), GL_FLOAT, GL_FALSE, VERTEX_ATTRIB_OFFSET(VertexPositionColorNormalUV, normal), nullptr);
+			GLsizei offset = VERTEX_ATTRIB_OFFSET(VertexPositionColorNormalUV, normal);
+			GLint elementSize = sizeof(VertexPositionColorNormalUV::normal) / sizeof(float);
+			glVertexAttribPointer(attribLoc, elementSize, GL_FLOAT, GL_FALSE, stride, (void*)offset);
 		}
 		attribLoc = mGLSLProgram->getAttributeLocation("vertexUV");
 		if (attribLoc != GL_INVALID_INDEX)
 		{
 			glEnableVertexAttribArray(attribLoc);
-			glVertexAttribPointer(attribLoc, sizeof(VertexPositionColorNormalUV::uv), GL_FLOAT, GL_FALSE, VERTEX_ATTRIB_OFFSET(VertexPositionColorNormalUV, uv), nullptr);
+			GLsizei offset = VERTEX_ATTRIB_OFFSET(VertexPositionColorNormalUV, uv);
+			GLint elementSize = sizeof(VertexPositionColorNormalUV::uv) / sizeof(float);
+			glVertexAttribPointer(attribLoc, elementSize, GL_FLOAT, GL_FALSE, stride, (void*)offset);
 		}
 
 

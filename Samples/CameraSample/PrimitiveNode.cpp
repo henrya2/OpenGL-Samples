@@ -137,6 +137,7 @@ PrimitiveNode::PrimitiveNode(int width /*= 10*/, int depth /*= 10*/)
 	glGenBuffers(1, &mVBOId);
 	glBindBuffer(GL_ARRAY_BUFFER, mVBOId);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(g_color_buffer_data), g_color_buffer_data, GL_STATIC_DRAW);
+
 	positionLoc = mGLSLProgram->getAttributeLocation("vertexColor");
 	glEnableVertexAttribArray(positionLoc);
 	glVertexAttribPointer(positionLoc, 3, GL_FLOAT, GL_FALSE, 0, 0);
@@ -164,6 +165,7 @@ PrimitiveNode::~PrimitiveNode()
 
 void PrimitiveNode::onRender(const Camera& camera, const glm::mat4& worldMatrix) const
 {
+	return;
 	glm::mat4 mvp = camera.getVP() * worldMatrix;
 
 	mGLSLProgram->use();
