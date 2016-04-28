@@ -336,11 +336,11 @@ void CubeComponent::updateRenderResources()
 	int indexCount = 0;
 	for (int i = 0; i < 6; ++i)
 	{
-		for (int j = 0; j + 2 < 4; ++j)
+		for (int j = 0; j < 2; ++j)
 		{
-			indexBufferData[indexCount++] = i * 6 + 0;
-			indexBufferData[indexCount++] = i * 6 + (j + 1);
-			indexBufferData[indexCount++] = i * 6 + (j + 2);
+			indexBufferData[indexCount++] = i * 4 + 0;
+			indexBufferData[indexCount++] = i * 4 + (j + 1);
+			indexBufferData[indexCount++] = i * 4 + (j + 2);
 		}
 	}
 
