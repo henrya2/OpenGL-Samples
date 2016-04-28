@@ -19,10 +19,10 @@ CubeComponent::CubeComponent()
 
 	const std::string defaultVertexShaderStr =
 		"#version 330 core\n"
-		"in vec3 vertexColor;\n"
 		"in vec3 vertexPosition;\n"
+		"in vec4 vertexColor;\n"
 		
-		"out vec3 fragmentColor;\n"
+		"out vec4 fragmentColor;\n"
 		
 		"uniform mat4 MVP;\n"
 		
@@ -37,12 +37,12 @@ CubeComponent::CubeComponent()
 		"#version 330 core\n"
 		"out vec4 outputColor;	//fragment shader output\n"
 
-		"in vec3 fragmentColor;\n"
+		"in vec4 fragmentColor;\n"
 
 		"void main()\n"
 		"{\n"
 		"//set the interpolated colour as the shader output\n"
-		"outputColor = vec4(fragmentColor, 1.0f);\n"
+		"outputColor = vec4(fragmentColor.xyz, 1.0f);\n"
 		"}\n";
 
 	GLSLProgram* defaultGLSLProgram = new GLSLProgram();
