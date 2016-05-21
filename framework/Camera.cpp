@@ -97,6 +97,12 @@ void Camera::updateViewMatrix()
 	glm::mat4 matrix = glm::mat4_cast(glm::quat(dImpl->rotation));
 	matrix = glm::transpose(matrix);
 
+	/* Equaivelent*/
+	/*
+	glm::quat inverseRotation = glm::inverse(glm::quat(dImpl->rotation));
+	matrix = glm::mat4_cast(inverseRotation);
+	*/
+
 	dImpl->viewMat = glm::translate(matrix, -dImpl->position);
 }
 
