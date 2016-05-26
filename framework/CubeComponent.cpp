@@ -21,10 +21,14 @@ CubeComponent::CubeComponent()
 		"#version 330 core\n"
 		"in vec3 vertexPosition;\n"
 		"in vec4 vertexColor;\n"
-		
+
 		"out vec4 fragmentColor;\n"
-		
-		"uniform mat4 MVP;\n"
+
+		"uniform mat4 MVPMatrix;\n"
+
+		"uniform mat4 ModelViewMatrix;\n"
+
+		"uniform mat3 NormalMatrix"
 		
 		"void main()\n"
 		"{\n"
@@ -74,11 +78,15 @@ void CubeComponent::setSize(float width, float height, float depth, bool needUpd
 void CubeComponent::onRender(const Camera& camera, const glm::mat4& worldMatrix)
 {
 	glm::mat4 mvp = camera.getVP() * worldMatrix;
+	glm::mat4 modelView = camera.getViewMatrix() * worldMatrix;
+	glm::mat3 normalMatrix = glm::inverse(glm::transpose(glm::mat3(modelView)));
 
 	if (mGLSLProgram)
 	{
 		mGLSLProgram->use();
-		mGLSLProgram->setUniform("MVP", mvp);
+		mGLSLProgram->setUniform("MVPMatrix", mvp);
+		mGLSLProgram->setUniform("ModelViewMatrix", modelView);
+		mGLSLProgram->setUniform("NormalMatrix", normalMatrix);
 
 		glBindBuffer(GL_ARRAY_BUFFER, mVertexBufferId);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mIndexBufferId);
