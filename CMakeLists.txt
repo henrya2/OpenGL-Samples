@@ -38,12 +38,19 @@ set(GLM_DIRECTORY glm)
 ##########################################
 # Add stb
 set(STB_DIRECTORY stb)
+set(AntTweakBar_DIRECTORY AntTweakBar)
+set(AntTweakBar_LIB_NAME AntTweakBar)
+
+list(APPEND GL_APP_DEPS ${AntTweakBar_LIB_NAME})
+
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/${AntTweakBar_DIRECTORY})
 
 # Add the include_directories last, to avoid the headers files to polutes other libraries
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/${GLM_DIRECTORY})
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/${STB_DIRECTORY})
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/${GLFW_DIRECTORY}/include)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/${GLEW_DIRECTORY}/include)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/${AntTweakBar_DIRECTORY}/include)
 
 if(WIN32)
 	list(APPEND GL_APP_LIBS Winmm.lib)
@@ -68,13 +75,13 @@ function(createSample NAME)
 	file(GLOB SAMPLE_HEADER ${A_Sample_Path}/*.h)
 	set(SAMPLE_NAME  ${NAME})
 
-	link_directories(${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/${FREEIMAGE_DIRECTORY}/${FREEIMAGE_BINARY_DIRECTORY})
+	#link_directories(${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/${FREEIMAGE_DIRECTORY}/${FREEIMAGE_BINARY_DIRECTORY})
 
 	add_executable(${SAMPLE_NAME} ${SAMPLE_SOURCE} ${SAMPLE_INLINE} ${SAMPLE_HEADER})
 	target_link_libraries(${SAMPLE_NAME} ${GL_APP_LIBS} ${GL_APP_DEPS})
 	add_dependencies(${SAMPLE_NAME} ${GL_APP_DEPS})
 
-	set_property(TARGET ${SAMPLE_NAME} PROPERTY COMPILE_DEFINITIONS GLEW_STATIC GLM_SWIZZLE GLM_FORCE_RADIANS "SAMPLE_NAME=\"${SAMPLE_NAME}\"")
+	set_property(TARGET ${SAMPLE_NAME} PROPERTY COMPILE_DEFINITIONS GLEW_STATIC GLM_SWIZZLE GLM_FORCE_RADIANS TW_STATIC TW_NO_LIB_PRAGMA "SAMPLE_NAME=\"${SAMPLE_NAME}\"")
 endfunction(createSample)
 
 include("SamplesLists.txt")
