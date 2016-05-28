@@ -1,4 +1,5 @@
 #include "PrimitiveComponent.h"
+#include "GLSLProgram.h"
 
 PrimitiveComponent::PrimitiveComponent()
 	: mGLSLProgram(nullptr)
