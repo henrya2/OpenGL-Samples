@@ -279,7 +279,11 @@ void GlfwOpenGLInputManager::processMousePosition(double xPos, double yPos)
 
 void GlfwOpenGLInputManager::processMouseButton(int button, int action, int modify)
 {
+	MouseButtonCode buttonCode;
+	buttonCode = static_cast<MouseButtonCode>(button);
+	EventMouseButton eventMouseButton(buttonCode, action == GLFW_PRESS);
 
+	notifyEvent(eventMouseButton);
 }
 
 void GlfwOpenGLInputManager::processKeyboard(int key, int scancode, int action, int mods)
@@ -287,4 +291,11 @@ void GlfwOpenGLInputManager::processKeyboard(int key, int scancode, int action, 
 	EventKeyboard eventKeyboard(g_RawGlfwCode2KeyCodeMap[key], action == GLFW_PRESS);
 
 	notifyEvent(eventKeyboard);
+}
+
+void GlfwOpenGLInputManager::processChar(unsigned int charCode)
+{
+	EventChar eventChar(charCode);
+
+	notifyEvent(eventChar);
 }

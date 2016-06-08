@@ -2,8 +2,8 @@
 
 EventKeyboard::EventKeyboard(KeyCode keyCode, bool isPressed)
 	: Event(Type::KEYBOARD)
-	, mKeyCode(keyCode)
-	, mIsPressed(isPressed)
+	, keyCode(keyCode)
+	, isPressed(isPressed)
 {
 
 }
@@ -24,4 +24,19 @@ void EventMousePosition::setDelta(double x, double y)
 {
 	deltaX = x;
 	deltaY = y;
+}
+
+EventMouseButton::EventMouseButton(MouseButtonCode button, bool pressed)
+	: Event(Type::MOUSE_BUTTON)
+	, buttonCode(button)
+	, isPressed(pressed)
+{
+
+}
+
+EventChar::EventChar(unsigned int charCode)
+	: Event(Type::CHARACTER)
+	, charCode(charCode)
+{
+
 }

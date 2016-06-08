@@ -8,8 +8,8 @@ public:
 	EventKeyboard(KeyCode keyCode, bool isPressed);
 
 public:
-	KeyCode mKeyCode;
-	bool mIsPressed;
+	KeyCode keyCode;
+	bool isPressed;
 };
 
 class EventMousePosition : public Event
@@ -23,4 +23,24 @@ public:
 public:
 	double xPos, yPos;
 	double deltaX, deltaY;
+};
+
+class EventMouseButton : public Event
+{
+public:
+	EventMouseButton(MouseButtonCode button, bool pressed);
+
+public:
+	MouseButtonCode buttonCode;
+
+	bool isPressed;
+};
+
+class EventChar : public Event
+{
+public:
+	EventChar(unsigned int charCode);
+
+public:
+	unsigned int charCode;
 };

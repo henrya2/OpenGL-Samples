@@ -3,6 +3,7 @@
 #include "EventTypeDefines.h"
 #include <gl/glew.h>
 #include <glfw/glfw3.h>
+#include "AntTweakBar.h"
 #include <iostream>
 #include <sstream>
 #include <stdio.h>
@@ -18,7 +19,7 @@ static void RegisterGlfwWindows(GlfwOpenGLWindow* glfwWindow)
 	allGlfwWindows[glfwWindow->getInternalGlfwWindow()] = glfwWindow;
 }
 
-static void UnRegisterGlfwWindows(GlfwOpenGLWindow* glfwWindow)
+static void unRegisterGlfwWindows(GlfwOpenGLWindow* glfwWindow)
 {
 	allGlfwWindows.erase(glfwWindow->getInternalGlfwWindow());
 }
@@ -163,7 +164,7 @@ static keyCodeItem g_keyCodeStructArray[] = {
 	{ GLFW_KEY_LAST, KeyCode::KEY_NONE }
 };
 
-static void SizeChangedCallBack(GLFWwindow* window, int width, int height)
+static void SizeChangedCallback(GLFWwindow* window, int width, int height)
 {
 	GlfwOpenGLWindow* glfwOpenGLWindow = allGlfwWindows[window];
 	glfwOpenGLWindow->notifyViewSizeChanged(width, height);
@@ -177,7 +178,7 @@ static void MousePositionCallback(GLFWwindow* window, double xPos, double yPos)
 	openGLInputManager->processMousePosition(xPos, yPos);
 }
 
-static void MouseButtonCallBack(GLFWwindow* window, int button, int action, int modify)
+static void MouseButtonCallback(GLFWwindow* window, int button, int action, int modify)
 {
 	GlfwOpenGLWindow* glfwOpenGLWindow = allGlfwWindows[window];
 	GlfwOpenGLInputManager* openGLInputManager = (GlfwOpenGLInputManager*)glfwOpenGLWindow->getInputManager();
@@ -185,12 +186,20 @@ static void MouseButtonCallBack(GLFWwindow* window, int button, int action, int 
 	openGLInputManager->processMouseButton(button, action, modify);
 }
 
-static void KeyboardCallBack(GLFWwindow* window, int key, int scancode, int action, int mods)
+static void KeyboardCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
 	GlfwOpenGLWindow* glfwOpenGLWindow = allGlfwWindows[window];
 	GlfwOpenGLInputManager* openGLInputManager = (GlfwOpenGLInputManager*)glfwOpenGLWindow->getInputManager();
 
 	openGLInputManager->processKeyboard(key, scancode, action, mods);
+}
+
+static void CharCallback(GLFWwindow* window, unsigned int charCode)
+{
+	GlfwOpenGLWindow* glfwOpenGLWindow = allGlfwWindows[window];
+	GlfwOpenGLInputManager* openGLInputManager = (GlfwOpenGLInputManager*)glfwOpenGLWindow->getInputManager();
+
+	openGLInputManager->processChar(charCode);
 }
 
 GlfwOpenGLWindow::GlfwOpenGLWindow()
@@ -225,10 +234,11 @@ void GlfwOpenGLWindow::createWindow(const std::string& title, int width, int hei
 
 	RegisterGlfwWindows(this);
 
-	glfwSetWindowSizeCallback(mGlfwWindow, &SizeChangedCallBack);
-	glfwSetMouseButtonCallback(mGlfwWindow, &MouseButtonCallBack);
+	glfwSetWindowSizeCallback(mGlfwWindow, &SizeChangedCallback);
+	glfwSetMouseButtonCallback(mGlfwWindow, &MouseButtonCallback);
 	glfwSetCursorPosCallback(mGlfwWindow, &MousePositionCallback);
-	glfwSetKeyCallback(mGlfwWindow, &KeyboardCallBack);
+	glfwSetKeyCallback(mGlfwWindow, &KeyboardCallback);
+	glfwSetCharCallback(mGlfwWindow, &CharCallback);
 }
 
 bool GlfwOpenGLWindow::isWindowCreated() const
@@ -287,7 +297,7 @@ bool GlfwOpenGLWindow::initGL()
 
 void GlfwOpenGLWindow::destroy()
 {
-	UnRegisterGlfwWindows(this);
+	unRegisterGlfwWindows(this);
 	glfwDestroyWindow(mGlfwWindow);
 }
 

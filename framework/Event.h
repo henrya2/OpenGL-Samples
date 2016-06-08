@@ -199,6 +199,7 @@ public:
 		MOUSE_BUTTON,
 		MOUSE_MOVE,
 		FOCUS,
+		CHARACTER,
 		CUSTOM
 	};
 

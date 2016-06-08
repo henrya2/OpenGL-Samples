@@ -35,6 +35,7 @@ public:
 	void processMousePosition(double xPos, double yPos);
 	void processMouseButton(int button, int action, int modify);
 	void processKeyboard(int key, int scancode, int action, int mods);
+	void processChar(unsigned int charCode);
 
 	virtual void clearEventStates() override;
 

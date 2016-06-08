@@ -109,7 +109,7 @@ void CameraNode::handleInputEvent(const Event& event)
 	{
 		const EventKeyboard& eventKeyboard = (const EventKeyboard&)event;
 
-		if (eventKeyboard.mKeyCode == KeyCode::KEY_Q && eventKeyboard.mIsPressed)
+		if (eventKeyboard.keyCode == KeyCode::KEY_Q && eventKeyboard.isPressed)
 		{
 			bool oldRelativeMode = inputManager->getRelativeMouseMode();
 			inputManager->setRelativeMouseMode(!oldRelativeMode);
