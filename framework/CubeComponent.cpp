@@ -18,7 +18,7 @@ CubeComponent::CubeComponent()
 	mTexture = nullptr;
 
 	const std::string defaultVertexShaderStr =
-		"#version 330 core\n"
+		"#version 330\n"
 		"in vec3 vertexPosition;\n"
 		"in vec4 vertexColor;\n"
 
@@ -28,25 +28,25 @@ CubeComponent::CubeComponent()
 
 		"uniform mat4 ModelViewMatrix;\n"
 
-		"uniform mat3 NormalMatrix"
+		"uniform mat3 NormalMatrix;\n"
 		
 		"void main()\n"
 		"{\n"
-		"	gl_Position = MVP * vec4(vertexPosition.xyz, 1);\n"
+		"	gl_Position = MVPMatrix * vec4(vertexPosition.xyz, 1);\n"
 		
 		"	fragmentColor = vertexColor;\n"
 		"}\n";
 
 	const std::string defaultFragmentShaderStr =
-		"#version 330 core\n"
+		"#version 330\n"
 		"out vec4 outputColor;	//fragment shader output\n"
 
 		"in vec4 fragmentColor;\n"
 
 		"void main()\n"
 		"{\n"
-		"//set the interpolated colour as the shader output\n"
-		"outputColor = vec4(fragmentColor.rgb, 1.0f);\n"
+		"	//set the interpolated color as the shader output\n"
+		"	outputColor = vec4(fragmentColor.rgb, 1.0);\n"
 		"}\n";
 
 	GLSLProgram* defaultGLSLProgram = new GLSLProgram();
