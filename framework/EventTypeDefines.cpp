@@ -40,3 +40,10 @@ EventChar::EventChar(unsigned int charCode)
 {
 
 }
+
+EventMouseWheel::EventMouseWheel(int position)
+	: Event(Type::MOUSE_WHEEL)
+	, wheelPosition(position)
+{
+
+}

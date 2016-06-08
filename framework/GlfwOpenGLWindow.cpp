@@ -186,6 +186,14 @@ static void MouseButtonCallback(GLFWwindow* window, int button, int action, int 
 	openGLInputManager->processMouseButton(button, action, modify);
 }
 
+static void ScrollCallback(GLFWwindow* window, double xPosition, double yPosition)
+{
+	GlfwOpenGLWindow* glfwOpenGLWindow = allGlfwWindows[window];
+	GlfwOpenGLInputManager* openGLInputManager = (GlfwOpenGLInputManager*)glfwOpenGLWindow->getInputManager();
+
+	openGLInputManager->processMouseWheel(static_cast<int>(yPosition));
+}
+
 static void KeyboardCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
 	GlfwOpenGLWindow* glfwOpenGLWindow = allGlfwWindows[window];
@@ -237,6 +245,7 @@ void GlfwOpenGLWindow::createWindow(const std::string& title, int width, int hei
 	glfwSetWindowSizeCallback(mGlfwWindow, &SizeChangedCallback);
 	glfwSetMouseButtonCallback(mGlfwWindow, &MouseButtonCallback);
 	glfwSetCursorPosCallback(mGlfwWindow, &MousePositionCallback);
+	glfwSetScrollCallback(mGlfwWindow, &ScrollCallback);
 	glfwSetKeyCallback(mGlfwWindow, &KeyboardCallback);
 	glfwSetCharCallback(mGlfwWindow, &CharCallback);
 }

@@ -36,6 +36,15 @@ public:
 	bool isPressed;
 };
 
+class EventMouseWheel : public Event
+{
+public:
+	EventMouseWheel(int position);
+
+public:
+	int wheelPosition;
+};
+
 class EventChar : public Event
 {
 public:

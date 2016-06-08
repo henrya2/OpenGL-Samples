@@ -286,6 +286,13 @@ void GlfwOpenGLInputManager::processMouseButton(int button, int action, int modi
 	notifyEvent(eventMouseButton);
 }
 
+void GlfwOpenGLInputManager::processMouseWheel(int position)
+{
+	EventMouseWheel eventMouseWheel(position);
+
+	notifyEvent(eventMouseWheel);
+}
+
 void GlfwOpenGLInputManager::processKeyboard(int key, int scancode, int action, int mods)
 {
 	EventKeyboard eventKeyboard(g_RawGlfwCode2KeyCodeMap[key], action == GLFW_PRESS);
