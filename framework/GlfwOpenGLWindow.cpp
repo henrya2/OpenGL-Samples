@@ -168,6 +168,8 @@ static void SizeChangedCallback(GLFWwindow* window, int width, int height)
 {
 	GlfwOpenGLWindow* glfwOpenGLWindow = allGlfwWindows[window];
 	glfwOpenGLWindow->notifyViewSizeChanged(width, height);
+
+	TwWindowSize(width, height);
 }
 
 static void MousePositionCallback(GLFWwindow* window, double xPos, double yPos)
@@ -175,7 +177,10 @@ static void MousePositionCallback(GLFWwindow* window, double xPos, double yPos)
 	GlfwOpenGLWindow* glfwOpenGLWindow = allGlfwWindows[window];
 	GlfwOpenGLInputManager* openGLInputManager = (GlfwOpenGLInputManager*)glfwOpenGLWindow->getInputManager();
 
-	openGLInputManager->processMousePosition(xPos, yPos);
+	if (openGLInputManager->getRelativeMouseMode() || !TwEventMousePosGLFW((int)xPos, (int)yPos))
+	{
+		openGLInputManager->processMousePosition(xPos, yPos);
+	}
 }
 
 static void MouseButtonCallback(GLFWwindow* window, int button, int action, int modify)
@@ -183,7 +188,10 @@ static void MouseButtonCallback(GLFWwindow* window, int button, int action, int 
 	GlfwOpenGLWindow* glfwOpenGLWindow = allGlfwWindows[window];
 	GlfwOpenGLInputManager* openGLInputManager = (GlfwOpenGLInputManager*)glfwOpenGLWindow->getInputManager();
 
-	openGLInputManager->processMouseButton(button, action, modify);
+	if (openGLInputManager->getRelativeMouseMode() || !TwEventMouseButtonGLFW(button, action))
+	{
+		openGLInputManager->processMouseButton(button, action, modify);
+	}
 }
 
 static void ScrollCallback(GLFWwindow* window, double xPosition, double yPosition)
@@ -191,7 +199,10 @@ static void ScrollCallback(GLFWwindow* window, double xPosition, double yPositio
 	GlfwOpenGLWindow* glfwOpenGLWindow = allGlfwWindows[window];
 	GlfwOpenGLInputManager* openGLInputManager = (GlfwOpenGLInputManager*)glfwOpenGLWindow->getInputManager();
 
-	openGLInputManager->processMouseWheel(static_cast<int>(yPosition));
+	if (openGLInputManager->getRelativeMouseMode() || !TwEventMouseWheelGLFW(yPosition))
+	{
+		openGLInputManager->processMouseWheel(static_cast<int>(yPosition));
+	}
 }
 
 static void KeyboardCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
@@ -199,7 +210,10 @@ static void KeyboardCallback(GLFWwindow* window, int key, int scancode, int acti
 	GlfwOpenGLWindow* glfwOpenGLWindow = allGlfwWindows[window];
 	GlfwOpenGLInputManager* openGLInputManager = (GlfwOpenGLInputManager*)glfwOpenGLWindow->getInputManager();
 
-	openGLInputManager->processKeyboard(key, scancode, action, mods);
+	if (openGLInputManager->getRelativeMouseMode() || !TwEventKeyGLFW(key, action))
+	{
+		openGLInputManager->processKeyboard(key, scancode, action, mods);
+	}
 }
 
 static void CharCallback(GLFWwindow* window, unsigned int charCode)
@@ -207,7 +221,10 @@ static void CharCallback(GLFWwindow* window, unsigned int charCode)
 	GlfwOpenGLWindow* glfwOpenGLWindow = allGlfwWindows[window];
 	GlfwOpenGLInputManager* openGLInputManager = (GlfwOpenGLInputManager*)glfwOpenGLWindow->getInputManager();
 
-	openGLInputManager->processChar(charCode);
+	if (openGLInputManager->getRelativeMouseMode() || !TwEventCharGLFW(charCode, GLFW_PRESS))
+	{
+		openGLInputManager->processChar(charCode);
+	}
 }
 
 GlfwOpenGLWindow::GlfwOpenGLWindow()
@@ -297,9 +314,14 @@ bool GlfwOpenGLWindow::initGL()
 
 	resizeOpenGLViewport(width, height);
 
-	glEnable(GL_CULL_FACE);
-	glFrontFace(GL_CCW);
-	glCullFace(GL_BACK);
+	//glEnable(GL_CULL_FACE);
+	//glFrontFace(GL_CCW);
+	//glCullFace(GL_BACK);
+
+	TwInit(TW_OPENGL_CORE, nullptr);
+	TwDefine(" GLOBAL fontSize=3 help='This example illustrates the definition of custom structure type as well as many other features.' ");
+
+	TwWindowSize(width, height);
 
 	return true;
 }
@@ -307,7 +329,10 @@ bool GlfwOpenGLWindow::initGL()
 void GlfwOpenGLWindow::destroy()
 {
 	unRegisterGlfwWindows(this);
-	glfwDestroyWindow(mGlfwWindow);
+	//glfwDestroyWindow(mGlfwWindow);
+
+	TwTerminate();
+	glfwTerminate();
 }
 
 IInputManager* GlfwOpenGLWindow::getInputManager()
@@ -328,7 +353,7 @@ void GlfwOpenGLWindow::pollEvents()
 
 void GlfwOpenGLWindow::endDrawing()
 {
-
+	TwDraw();
 }
 
 void GlfwOpenGLWindow::swapBuffers()
